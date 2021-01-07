@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'war'
 }
 
 group 'com.epam.esm'
@@ -19,6 +20,8 @@ dependencies {
     implementation springframework.spring_web
 
     implementation springframework.spring_webmvc
+
+    implementation group: 'org.thymeleaf', name: 'thymeleaf-spring5', version: '3.0.12.RELEASE'
 
 
 }
