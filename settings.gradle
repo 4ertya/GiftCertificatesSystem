@@ -1,6 +1,6 @@
 rootProject.name = 'GiftCertificatesSystem'
-include 'persistence'
+include 'dao'
 include 'service'
 include 'web'
-include 'web'
+include 'model'
 

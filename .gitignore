@@ -1,5 +1,5 @@
 /.gradle/
 /.idea/
 /web/build/
-/persistence/build/
+/dao/build/
 /service/build/

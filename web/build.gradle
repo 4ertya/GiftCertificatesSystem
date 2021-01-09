@@ -12,18 +12,17 @@ repositories {
 
 dependencies {
     compile project(':service')
+    compile project(':dao')
+    compile project(':model')
 
-    implementation springframework.spring_core
 
-    implementation springframework.spring_context
 
-    implementation springframework.spring_web
-
-    implementation springframework.spring_webmvc
 
     implementation group: 'org.thymeleaf', name: 'thymeleaf-spring5', version: '3.0.12.RELEASE'
 
     providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.18'
 
 
 }

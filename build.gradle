@@ -1,13 +1,20 @@
 group 'com.epam.esm'
 version '1.0'
 
+
+
+
 ext.versions = [
         springframework: "5.2.12.RELEASE"
 ]
 
-ext.springframework = [
-        spring_core   : "org.springframework:spring-core:$versions.springframework",
-        spring_context: "org.springframework:spring-context:$versions.springframework",
-        spring_web    : "org.springframework:spring-web:$versions.springframework",
-        spring_webmvc : "org.springframework:spring-webmvc:$versions.springframework"
-]
+
+subprojects {
+    apply plugin: 'java'
+
+    dependencies {
+         implementation "org.springframework:spring-webmvc:${versions.springframework}"
+         implementation "org.springframework:spring-jdbc:${versions.springframework}"
+
+    }
+}
