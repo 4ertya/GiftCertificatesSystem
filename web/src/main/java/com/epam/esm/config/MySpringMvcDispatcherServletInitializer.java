@@ -10,7 +10,7 @@ public class MySpringMvcDispatcherServletInitializer extends AbstractAnnotationC
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[]{RepoConfig.class};
+        return new Class[]{WebConfig.class};
     }
 
     @Override

@@ -19,7 +19,6 @@ public class CertificateServiceImpl implements CertificatesService {
         this.certificateDAO = certificateDAO;
     }
 
-
     @Override
     public List<Certificate> readAll() {
         return certificateDAO.readAll();
@@ -33,7 +32,6 @@ public class CertificateServiceImpl implements CertificatesService {
     @Override
     public Certificate create(Certificate certificate) {
         certificateDAO.create(certificate);
-
         return null;
     }
 }

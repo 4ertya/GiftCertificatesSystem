@@ -2,7 +2,6 @@ package com.epam.esm.controller;
 
 import com.epam.esm.Certificate;
 import com.epam.esm.CertificatesService;
-import com.epam.esm.impl.SQLCertificatesDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +20,10 @@ public class GiftCertificatesController {
     }
 
     @GetMapping(produces = {"application/json"})
-    @ResponseBody
     public List<Certificate> readAll(Model model) {
         return certificatesService.readAll();
     }
+
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
     public Certificate read(@PathVariable("id") int id, Model model) {
@@ -34,13 +33,8 @@ public class GiftCertificatesController {
 
 
     @PostMapping(value = "/new", produces = {"application/json"}, consumes = {"application/json"})
-    @ResponseBody
-    public Certificate newCertificate(@RequestBody Certificate certificate) {
+    public Certificate create(@RequestBody Certificate certificate) {
         return certificatesService.create(certificate);
     }
 
-    @PostMapping()
-    public String create(@ModelAttribute("certificate") Certificate certificate) {
-        return "redirect:/certificates";
-    }
 }
