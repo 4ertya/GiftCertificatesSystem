@@ -1,37 +1,42 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.CertificatesDAO;
 import com.epam.esm.Certificate;
+import com.epam.esm.CertificatesService;
+import com.epam.esm.impl.SQLCertificatesDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+
+@RestController
 @RequestMapping("/certificates")
 public class GiftCertificatesController {
-    private final CertificatesDAO certificatesDAO;
+
+    private final CertificatesService certificatesService;
 
     @Autowired
-    public GiftCertificatesController(CertificatesDAO certificatesDAO) {
-        this.certificatesDAO = certificatesDAO;
+    public GiftCertificatesController(CertificatesService certificatesService) {
+        this.certificatesService = certificatesService;
     }
 
-    @GetMapping()
-    public String readAll(Model model) {
-        model.addAttribute("certificates", certificatesDAO.index());
-        return "certificates/index";
+    @GetMapping(produces = {"application/json"})
+    @ResponseBody
+    public List<Certificate> readAll(Model model) {
+        return certificatesService.readAll();
     }
 
-    @GetMapping("/{id}")
-    public String read(@PathVariable("id") int id, Model model) {
-        return "certificates/show";
+    @GetMapping(value = "/{id}", produces = {"application/json"})
+    public Certificate read(@PathVariable("id") int id, Model model) {
+        System.out.println(certificatesService.read(id));
+        return certificatesService.read(id);
     }
 
-    @GetMapping("/new")
-    public String newCertificate(Model model) {
-        model.addAttribute("certificate", new Certificate());
-        return "certificates/new";
+
+    @PostMapping(value = "/new", produces = {"application/json"}, consumes = {"application/json"})
+    @ResponseBody
+    public Certificate newCertificate(@RequestBody Certificate certificate) {
+        return certificatesService.create(certificate);
     }
 
     @PostMapping()

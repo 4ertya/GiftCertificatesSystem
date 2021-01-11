@@ -16,7 +16,7 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 @Configuration
 @ComponentScan("com.epam.esm")
 @EnableWebMvc
-@Import(SpringConfig.class)
+@Import(RepoConfig.class)
 public class SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;

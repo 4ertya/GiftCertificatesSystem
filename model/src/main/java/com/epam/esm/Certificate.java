@@ -1,6 +1,8 @@
 package com.epam.esm;
 
-import java.time.ZonedDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.time.LocalDateTime;
 
 public class Certificate {
     private Integer id;
@@ -8,8 +10,11 @@ public class Certificate {
     private String description;
     private Integer price;
     private Integer duration;
-    private ZonedDateTime createDate;
-    private ZonedDateTime lastUpdateDate;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    private LocalDateTime createDate;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    private LocalDateTime lastUpdateDate;
+    private String[] tags;
 
     public Integer getId() {
         return id;
@@ -51,19 +56,41 @@ public class Certificate {
         this.duration = duration;
     }
 
-    public ZonedDateTime getCreateDate() {
+    public LocalDateTime getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(ZonedDateTime createDate) {
+    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 
-    public ZonedDateTime getLastUpdateDate() {
+    public LocalDateTime getLastUpdateDate() {
         return lastUpdateDate;
     }
 
-    public void setLastUpdateDate(ZonedDateTime lastUpdateDate) {
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public String[] getTags() {
+        return tags;
+    }
+
+    public void setTags(String[] tags) {
+        this.tags = tags;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Certificate{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", duration=" + duration +
+                ", createDate='" + createDate + '\'' +
+                ", lastUpdateDate='" + lastUpdateDate + '\'' +
+                '}';
     }
 }

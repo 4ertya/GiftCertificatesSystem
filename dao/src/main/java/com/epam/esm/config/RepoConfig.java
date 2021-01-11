@@ -17,12 +17,12 @@ import javax.sql.DataSource;
 @ComponentScan("com.epam.esm")
 @EnableWebMvc
 @PropertySource("classpath:db.properties")
-public class SpringConfig {
+public class RepoConfig {
 
     private final Environment environment;
 
     @Autowired
-    public SpringConfig(Environment environment) {
+    public RepoConfig(Environment environment) {
         this.environment = environment;
     }
 
@@ -33,6 +33,7 @@ public class SpringConfig {
         dataSource.setUrl(environment.getProperty("db.url"));
         dataSource.setUsername(environment.getProperty("db.username"));
         dataSource.setPassword(environment.getProperty("db.password"));
+
 
         return dataSource;
     }
