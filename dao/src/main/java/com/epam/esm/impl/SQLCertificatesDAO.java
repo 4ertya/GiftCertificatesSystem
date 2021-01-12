@@ -1,15 +1,22 @@
 package com.epam.esm.impl;
 
-import com.epam.esm.Certificate;
+import com.epam.esm.entity.Certificate;
 import com.epam.esm.CertificateDAO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository("SQL")
+@Repository
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SQLCertificatesDAO implements CertificateDAO {
 
 
@@ -53,11 +60,7 @@ public class SQLCertificatesDAO implements CertificateDAO {
             ") t ;";
 
     private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public SQLCertificatesDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
     public List<Certificate> readAll() {
@@ -74,8 +77,22 @@ public class SQLCertificatesDAO implements CertificateDAO {
 
     @Override
     public Certificate create(Certificate certificate) {
-        jdbcTemplate.update(CREATE_CERTIFICATE, certificate.getName(), certificate.getDescription(), certificate.getPrice(), certificate.getDuration(), certificate.getTags());
-        return certificate;
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("name", certificate.getName())
+                .addValue("description", certificate.getDescription())
+                .addValue("price", certificate.getPrice())
+                .addValue("duration", certificate.getDuration());
+        namedParameterJdbcTemplate.update(CREATE_CERTIFICATE, parameterSource, keyHolder);
+        if (keyHolder.getKey() == null) {
+            //TODO: - Entity not added exception
+        }
+        return read((Integer) keyHolder.getKey());
+    }
+
+    @Override
+    public Certificate update(Certificate certificate) {
+        return null;
     }
 }
 

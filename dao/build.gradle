@@ -10,10 +10,9 @@ repositories {
 }
 
 dependencies {
-compile project (':model')
+    compile project(':model')
 
-        compile group: 'com.zaxxer', name: 'HikariCP', version: '3.4.5'
-
+    compile group: 'com.zaxxer', name: 'HikariCP', version: '3.4.5'
 
 
 }

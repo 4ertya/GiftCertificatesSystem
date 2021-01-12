@@ -16,6 +16,11 @@ subprojects {
         implementation "org.springframework:spring-jdbc:${versions.springframework}"
         implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${versions.jackson}"
         implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: "${versions.jackson}"
+        implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.16'
+        annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.16'
+        implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+
+
 
 
     }

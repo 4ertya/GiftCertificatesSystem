@@ -1,40 +1,40 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.Certificate;
+import com.epam.esm.entity.Certificate;
 import com.epam.esm.CertificatesService;
+import com.epam.esm.dto.CertificateDTO;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping("/certificates")
-public class GiftCertificatesController {
+public class CertificatesController {
 
     private final CertificatesService certificatesService;
 
-    @Autowired
-    public GiftCertificatesController(CertificatesService certificatesService) {
-        this.certificatesService = certificatesService;
-    }
-
     @GetMapping(produces = {"application/json"})
-    public List<Certificate> readAll(Model model) {
+    public List<CertificateDTO> readAll() {
         return certificatesService.readAll();
     }
 
-
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    public Certificate read(@PathVariable("id") int id, Model model) {
+    public CertificateDTO read(@PathVariable("id") int id) {
         System.out.println(certificatesService.read(id));
         return certificatesService.read(id);
     }
 
-
     @PostMapping(value = "/new", produces = {"application/json"}, consumes = {"application/json"})
     public Certificate create(@RequestBody Certificate certificate) {
         return certificatesService.create(certificate);
+    }
+
+    @PatchMapping(value = "/{id}", produces = {"application/json"}, consumes = {"application/json"})
+    public Certificate update(@PathVariable("id") int id, @RequestBody Certificate certificate) {
+        return certificatesService.update(id, certificate);
     }
 
 }
