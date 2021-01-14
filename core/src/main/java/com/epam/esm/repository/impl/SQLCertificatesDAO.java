@@ -56,7 +56,7 @@ public class SQLCertificatesDAO implements CertificateDAO {
 
     @Override
     public Optional<Certificate> update(Certificate certificate) {
-        int rows = jdbcTemplate.update(UPDATE_BY_ID_QUERY, new BeanPropertyRowMapper<>(Certificate.class));
+        int rows = jdbcTemplate.update(UPDATE_BY_ID_QUERY, certificate.getName(), certificate.getDescription(), certificate.getPrice(), certificate.getDuration(),certificate.getId());
         return rows == 0 ? Optional.empty() : read(certificate.getId());
     }
 
