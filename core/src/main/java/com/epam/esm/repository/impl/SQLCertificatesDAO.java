@@ -14,50 +14,18 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SQLCertificatesDAO implements CertificateDAO {
 
 
-    private final static String READ_ALL_CERTIFICATES = "SELECT gc.*, string_agg(t.name, ', ') tags\n" +
-            "FROM gift_certificates gc\n" +
-            "JOIN gift_certificates_tags gct on gct.gift_certificates_id = gc.id\n" +
-            "JOIN tags t on t.id = gct.tags_id\n" +
-            "group by gc.id;";
-    private final static String READ_CERTIFICATE_BY_ID = "SELECT gc.*, string_agg(t.name, ', ') tags\n" +
-            "FROM gift_certificates gc\n" +
-            "JOIN gift_certificates_tags gct on gct.gift_certificates_id = gc.id\n" +
-            "JOIN tags t on t.id = gct.tags_id\n" +
-            "WHERE gc.id=? \n" +
-            "group by gc.id;";
-    private final static String CREATE_CERTIFICATE = "WITH input_data(name, description, price, duration, tags) " +
-            "AS (\n" +
-            "VALUES (?,?,?,?,?)\n" +
-            "),\n" +
-            "input_tags AS (\n" +
-            "SELECT DISTINCT tag     -- fold duplicates\n" +
-            "FROM input_data, unnest(tags::text[]) tag\n" +
-            ")\n" +
-            ",gc AS (  -- insert into questions\n" +
-            "INSERT INTO gift_certificates (name, description, price, duration)\n" +
-            "SELECT name, description, price, duration\n" +
-            "FROM   input_data\n" +
-            "RETURNING gift_certificates.id\n" +
-            ")\n" +
-            ",t AS (  -- insert into tags\n" +
-            "INSERT INTO tags (name)\n" +
-            "TABLE  input_tags  -- short for: SELECT * FROM input_tags\n" +
-            "ON CONFLICT (name) DO NOTHING    -- only new tags\n" +
-            "RETURNING tags.id\n" +
-            ")\n" +
-            "INSERT INTO gift_certificates_tags (gift_certificates_id, tags_id)\n" +
-            "SELECT gc.id, t.id\n" +
-            "FROM   gc, (\n" +
-            "SELECT t.id FROM t\n" +
-            "UNION  ALL\n" +
-            "SELECT id FROM input_tags JOIN tags ON tag=tags.name\n" +
-            ") t ;";
+    private final static String READ_ALL_CERTIFICATES = "SELECT * FROM certificates";
+    private final static String READ_CERTIFICATE_BY_ID = "SELECT * FROM certificates WHERE id=?;";
+    private final static String CREATE_CERTIFICATE = "INSERT INTO certificates (name, description, price, duration) VALUES (:name,:description,:price,:duration);";
+    private final static String UPDATE_BY_ID_QUERY = "UPDATE certificates set name=?, description=?, price=?, duration =?, last_update_date=DEFAULT WHERE id=?;";
+    private final static String DELETE_BY_ID_QUERY = "DELETE FROM certificates WHERE id=?;";
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -68,31 +36,37 @@ public class SQLCertificatesDAO implements CertificateDAO {
     }
 
     @Override
-    public Certificate read(int id) {
+    public Optional<Certificate> read(int id) {
         return jdbcTemplate.query(READ_CERTIFICATE_BY_ID, new Object[]{id}, new BeanPropertyRowMapper<>(Certificate.class))
                 .stream()
-                .findAny()
-                .orElse(null);
+                .findAny();
     }
 
     @Override
-    public Certificate create(Certificate certificate) {
+    public Optional<Certificate> create(Certificate certificate) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("name", certificate.getName())
                 .addValue("description", certificate.getDescription())
                 .addValue("price", certificate.getPrice())
                 .addValue("duration", certificate.getDuration());
-        namedParameterJdbcTemplate.update(CREATE_CERTIFICATE, parameterSource, keyHolder);
-        if (keyHolder.getKey() == null) {
-            //TODO: - Entity not added exception
-        }
-        return read((Integer) keyHolder.getKey());
+        namedParameterJdbcTemplate.update(CREATE_CERTIFICATE, parameterSource, keyHolder, new String[]{"id"});
+        return keyHolder.getKey() != null ? read((Integer) keyHolder.getKey()) : Optional.empty();
     }
 
     @Override
-    public Certificate update(Certificate certificate) {
-        return null;
+    public Optional<Certificate> update(Certificate certificate) {
+        int rows = jdbcTemplate.update(UPDATE_BY_ID_QUERY, new BeanPropertyRowMapper<>(Certificate.class));
+        return rows == 0 ? Optional.empty() : read(certificate.getId());
+    }
+
+    @Override
+    public Optional<Certificate> delete(int id) {
+        Optional<Certificate> certificate = read(id);
+        if (certificate.isPresent()) {
+            jdbcTemplate.update(DELETE_BY_ID_QUERY, id);
+        }
+        return certificate;
     }
 }
 

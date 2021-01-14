@@ -2,7 +2,6 @@ package com.epam.esm.controller;
 
 
 import com.epam.esm.dto.CertificateDTO;
-import com.epam.esm.model.Certificate;
 import com.epam.esm.service.CertificatesService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +23,17 @@ public class CertificatesController {
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
     public CertificateDTO read(@PathVariable("id") int id) {
-        System.out.println(certificatesService.read(id));
         return certificatesService.read(id);
     }
 
     @PostMapping(value = "/new", produces = {"application/json"}, consumes = {"application/json"})
-    public Certificate create(@RequestBody Certificate certificate) {
-        return certificatesService.create(certificate);
+    public CertificateDTO create(@RequestBody CertificateDTO certificateDTO) {
+        return certificatesService.create(certificateDTO);
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"}, consumes = {"application/json"})
-    public Certificate update(@PathVariable("id") int id, @RequestBody Certificate certificate) {
-        return certificatesService.update(id, certificate);
+    public CertificateDTO update(@PathVariable("id") int id, @RequestBody CertificateDTO certificateDTO) {
+        return certificatesService.update(id, certificateDTO);
     }
 
 }

@@ -4,15 +4,18 @@ package com.epam.esm.repository;
 import com.epam.esm.model.Certificate;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CertificateDAO {
 
     List<Certificate> readAll();
 
-    Certificate read(int id);
+    Optional<Certificate> read(int id);
 
-    Certificate create(Certificate certificate);
+    Optional<Certificate> create(Certificate certificate);
 
-    Certificate update(Certificate certificate);
+    Optional<Certificate> update(Certificate certificate);
+
+    Optional<Certificate> delete(int id);
 
 }

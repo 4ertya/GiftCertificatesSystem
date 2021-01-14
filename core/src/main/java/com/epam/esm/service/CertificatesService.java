@@ -11,7 +11,9 @@ public interface CertificatesService {
 
     CertificateDTO read(int id);
 
-    Certificate create(Certificate certificate);
+    CertificateDTO create(CertificateDTO certificateDTO);
 
-    Certificate update(int id, Certificate certificate);
+    CertificateDTO update(int id, CertificateDTO certificateDTO);
+
+    CertificateDTO delete(int id);
 }

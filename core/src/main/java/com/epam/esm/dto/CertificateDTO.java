@@ -1,7 +1,6 @@
 package com.epam.esm.dto;
 
 
-import com.epam.esm.model.Tag;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
@@ -33,9 +32,9 @@ public class CertificateDTO {
     private LocalDateTime createDate;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime lastUpdateDate;
-    private List<Tag> tags;
+    private List<TagDTO> tags;
 
-    public CertificateDTO(String name, String description, Integer price, Integer duration, List<Tag> tags) {
+    public CertificateDTO(String name, String description, Integer price, Integer duration, List<TagDTO> tags) {
         this.name = name;
         this.description = description;
         this.price = price;
