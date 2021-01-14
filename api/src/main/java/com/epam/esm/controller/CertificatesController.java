@@ -36,4 +36,9 @@ public class CertificatesController {
         return certificatesService.update(id, certificateDTO);
     }
 
+    @DeleteMapping(value = "/{id}", produces = {"application/json"})
+    public CertificateDTO delete(@PathVariable("id") int id){
+        return certificatesService.delete(id);
+    }
+
 }

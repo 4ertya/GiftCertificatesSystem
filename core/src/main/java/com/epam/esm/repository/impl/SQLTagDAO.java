@@ -59,6 +59,7 @@ public class SQLTagDAO implements TagDAO {
         Optional<Tag> temp = Optional.ofNullable(findByName(tag.getName()));
 
         if (temp.isPresent()) {
+            System.out.println(temp.get());
             return temp.get();
         }
 
