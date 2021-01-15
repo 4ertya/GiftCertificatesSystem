@@ -84,8 +84,7 @@ public class CertificateServiceImpl implements CertificatesService {
     @Override
     public CertificateDTO delete(int id) {
         List<TagDTO> tags = tagService.findByCertificateId(id);
-        tags.forEach(tag -> certificateTagService.remove(id, tag.getId()));
-        System.out.println("DONE");
+        certificateTagService.deleteByCertificateId(id);
         Certificate certificate = certificateDAO.delete(id).orElseThrow(() -> new EntityNotDeletedException("Certificate", id));
         return certificateMapper.toDto(certificate, tags);
     }

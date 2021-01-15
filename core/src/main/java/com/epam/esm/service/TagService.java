@@ -15,4 +15,6 @@ public interface TagService {
     TagDTO create(TagDTO tagDTO);
 
     TagDTO update(int id, TagDTO tagDTO);
+
+    TagDTO delete(int id);
 }
