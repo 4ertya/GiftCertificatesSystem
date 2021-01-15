@@ -5,8 +5,10 @@ import com.epam.esm.dto.CertificateDTO;
 import com.epam.esm.service.CertificatesService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,7 +29,8 @@ public class CertificatesController {
     }
 
     @PostMapping(value = "/new", produces = {"application/json"}, consumes = {"application/json"})
-    public CertificateDTO create(@RequestBody CertificateDTO certificateDTO) {
+    public CertificateDTO create(@Valid @RequestBody CertificateDTO certificateDTO) {
+        System.out.println(certificateDTO.getName());
         return certificatesService.create(certificateDTO);
     }
 

@@ -18,7 +18,13 @@ public class CertificateTagServiceImpl implements CertificateTagService {
     }
 
     @Override
-    public Integer remove(int certificateId, int tagId) {
-        return certificateTagsDAO.remove(certificateId, tagId);
+    public Integer deleteByCertificateId(int certificateId) {
+        return certificateTagsDAO.deleteByCertificateId(certificateId);
     }
+
+    @Override
+    public Integer deleteByTagId(int tagId) {
+        return certificateTagsDAO.deleteByTagId(tagId);
+    }
+
 }

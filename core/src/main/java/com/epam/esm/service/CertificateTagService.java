@@ -4,5 +4,6 @@ public interface CertificateTagService {
 
     Integer add(int certificateId, int tagId);
 
-    Integer remove(int certificateId, int tagId);
+    Integer deleteByCertificateId(int certificateId);
+    Integer deleteByTagId(int tagId);
 }
