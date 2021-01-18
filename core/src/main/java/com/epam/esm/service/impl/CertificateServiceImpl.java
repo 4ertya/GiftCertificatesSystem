@@ -10,6 +10,8 @@ import com.epam.esm.exception.EntityNotUpdatedException;
 import com.epam.esm.mapper.CertificateMapper;
 import com.epam.esm.model.Certificate;
 import com.epam.esm.repository.CertificateDAO;
+import com.epam.esm.repository.specification.Specification;
+import com.epam.esm.repository.specification.SpecificationCreator;
 import com.epam.esm.service.CertificateTagService;
 import com.epam.esm.service.CertificatesService;
 import com.epam.esm.service.TagService;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -28,11 +31,14 @@ public class CertificateServiceImpl implements CertificatesService {
     private final TagService tagService;
     private final CertificateTagService certificateTagService;
     private final CertificateMapper certificateMapper;
+    private final SpecificationCreator specificationCreator;
 
 
     @Override
-    public List<CertificateDTO> readAll() {
-        List<Certificate> certificates = certificateDAO.readAll();
+    public List<CertificateDTO> readAll(String tagName, String partName, String partDescription) {
+        Optional<Specification> receiveSpecification = specificationCreator.receiveSpecification(tagName, partName, partDescription);
+
+        List<Certificate> certificates = receiveSpecification.isPresent() ? certificateDAO.readAllBySpecification(receiveSpecification.get()) : certificateDAO.readAll();
         if (certificates.isEmpty()) {
             return null;
         }
@@ -70,11 +76,13 @@ public class CertificateServiceImpl implements CertificatesService {
         Certificate newCertificate = certificateMapper.toEntity(certificateDTO);
         newCertificate.setId(id);
         Certificate certificate = certificateDAO.update(newCertificate).orElseThrow(() -> new EntityNotUpdatedException("Certificate", id));
-        for (TagDTO tagDTO : certificateDTO.getTags()) {
-            TagDTO tag = tagService.create(tagDTO);
-            if (tag != null) {
-                int tagId = tag.getId();
-                certificateTagService.add(certificate.getId(), tagId);
+        if (certificateDTO.getTags() != null) {
+            for (TagDTO tagDTO : certificateDTO.getTags()) {
+                TagDTO tag = tagService.create(tagDTO);
+                if (tag != null) {
+                    int tagId = tag.getId();
+                    certificateTagService.add(certificate.getId(), tagId);
+                }
             }
         }
         List<TagDTO> tags = tagService.findByCertificateId(id);

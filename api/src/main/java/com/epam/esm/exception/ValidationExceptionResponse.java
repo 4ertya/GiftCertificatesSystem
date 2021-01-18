@@ -6,8 +6,11 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-@JsonPropertyOrder({"message","errorCode"})
-public class ExceptionResponse {
+@JsonPropertyOrder({"field", "message", "errorCode"})
+public class ValidationExceptionResponse {
+
+    private String field;
     private String message;
-    private String errorCode;
+
+
 }

@@ -1,7 +1,7 @@
 package com.epam.esm.dto;
 
+import com.epam.esm.validator.NewEntity;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -9,8 +9,8 @@ import javax.validation.constraints.Size;
 @Data
 public class TagDTO {
     private Integer id;
-    @NotBlank(message = "Need to enter a name")
-    @Size(min = 3, max = 10, message = "Name length must be between 3 and 20 characters")
+    @NotBlank(groups = {NewEntity.class})
+    @Size(min = 3, max = 10)
     private String name;
 
 }

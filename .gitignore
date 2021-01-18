@@ -1,4 +1,4 @@
 /.gradle/
 /.idea/
-/core/build/
-/api/build/
+/core/build
+/api/build

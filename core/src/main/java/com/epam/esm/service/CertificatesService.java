@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CertificatesService {
 
-    List<CertificateDTO> readAll();
+    List<CertificateDTO> readAll(String tagName, String partName, String partDescription);
 
     CertificateDTO read(int id);
 
