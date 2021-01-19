@@ -14,7 +14,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +22,8 @@ import java.util.Optional;
 public class SQLCertificatesDAO implements CertificateDAO {
 
 
-    private final static String READ_ALL_CERTIFICATES = "SELECT certificates.* FROM certificates JOIN certificates_tags ct on certificates.id = ct.gift_certificates_id  JOIN tags  on tags.id = ct.tags_id WHERE 1=1";
+    private final static String READ_ALL_CERTIFICATES_BY_SPECIFICATION = "SELECT certificates.* FROM certificates JOIN certificates_tags ct on certificates.id = ct.gift_certificates_id JOIN tags  on tags.id = ct.tags_id WHERE 1=1";
+    private final static String READ_ALL_CERTIFICATES = "SELECT * FROM certificates;";
     private final static String READ_CERTIFICATE_BY_ID = "SELECT * FROM certificates WHERE id=?;";
     private final static String CREATE_CERTIFICATE = "INSERT INTO certificates (name, description, price, duration) VALUES (:name,:description,:price,:duration);";
     private final static String UPDATE_BY_ID_QUERY = "UPDATE certificates set " +
@@ -33,7 +33,6 @@ public class SQLCertificatesDAO implements CertificateDAO {
             "duration =COALESCE(?,duration), " +
             "last_update_date=DEFAULT WHERE id=?;";
     private final static String DELETE_BY_ID_QUERY = "DELETE FROM certificates WHERE id=?;";
-    private final static String GROUP_BY_ID=" GROUP BY certificates.id";
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -41,13 +40,12 @@ public class SQLCertificatesDAO implements CertificateDAO {
     @Override
     public List<Certificate> readAll() {
         return jdbcTemplate.query(READ_ALL_CERTIFICATES, new BeanPropertyRowMapper<>(Certificate.class));
+
     }
 
     @Override
     public List<Certificate> readAllBySpecification(Specification specification) {
-        System.out.println(Arrays.toString(specification.receiveParameters()));
-        System.out.println(READ_ALL_CERTIFICATES+specification.toSqlRequest());
-        return jdbcTemplate.query(READ_ALL_CERTIFICATES+specification.toSqlRequest()+GROUP_BY_ID,specification.receiveParameters(), new BeanPropertyRowMapper<>(Certificate.class));
+        return jdbcTemplate.query(READ_ALL_CERTIFICATES_BY_SPECIFICATION + specification.toSqlRequest(), specification.receiveParameters(), new BeanPropertyRowMapper<>(Certificate.class));
     }
 
     @Override
@@ -71,7 +69,7 @@ public class SQLCertificatesDAO implements CertificateDAO {
 
     @Override
     public Optional<Certificate> update(Certificate certificate) {
-        int rows = jdbcTemplate.update(UPDATE_BY_ID_QUERY, certificate.getName(), certificate.getDescription(), certificate.getPrice(), certificate.getDuration(),certificate.getId());
+        int rows = jdbcTemplate.update(UPDATE_BY_ID_QUERY, certificate.getName(), certificate.getDescription(), certificate.getPrice(), certificate.getDuration(), certificate.getId());
         return rows == 0 ? Optional.empty() : read(certificate.getId());
     }
 

@@ -45,7 +45,6 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDTO create(TagDTO tagDTO) {
-        System.out.println(tagDTO.getName());
         Tag tag = tagDAO.create(tagMapper.toEntity(tagDTO)).orElseThrow(() -> new EntityNotAddedException("Tag"));
         return read(tag.getId());
     }

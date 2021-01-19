@@ -18,8 +18,9 @@ import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,14 +36,15 @@ public class CertificateServiceImpl implements CertificatesService {
 
 
     @Override
-    public List<CertificateDTO> readAll(String tagName, String partName, String partDescription) {
-        Optional<Specification> receiveSpecification = specificationCreator.receiveSpecification(tagName, partName, partDescription);
+    @Transactional
+    public List<CertificateDTO> readAll(String tagName, String partName, String partDescription, String dateSort, String nameSort) {
+        Optional<Specification> receiveSpecification = specificationCreator.receiveSpecification(tagName, partName, partDescription, dateSort, nameSort);
 
         List<Certificate> certificates = receiveSpecification.isPresent() ? certificateDAO.readAllBySpecification(receiveSpecification.get()) : certificateDAO.readAll();
         if (certificates.isEmpty()) {
             return null;
         }
-        List<CertificateDTO> certificateDTOS = new LinkedList<>();
+        List<CertificateDTO> certificateDTOS = new ArrayList<>();
         for (Certificate certificate : certificates) {
             List<TagDTO> tags = tagService.findByCertificateId(certificate.getId());
             certificateDTOS.add(certificateMapper.toDto(certificate, tags));
@@ -51,6 +53,7 @@ public class CertificateServiceImpl implements CertificatesService {
     }
 
     @Override
+    @Transactional
     public CertificateDTO read(int id) {
         Certificate certificate = certificateDAO.read(id)
                 .orElseThrow(() -> new EntityNotFoundException("Certificate"));
@@ -59,6 +62,7 @@ public class CertificateServiceImpl implements CertificatesService {
     }
 
     @Override
+    @Transactional
     public CertificateDTO create(CertificateDTO certificateDTO) {
 
         Certificate certificate = certificateDAO.create(certificateMapper.toEntity(certificateDTO))
@@ -72,6 +76,7 @@ public class CertificateServiceImpl implements CertificatesService {
     }
 
     @Override
+    @Transactional
     public CertificateDTO update(int id, CertificateDTO certificateDTO) {
         Certificate newCertificate = certificateMapper.toEntity(certificateDTO);
         newCertificate.setId(id);
@@ -90,6 +95,7 @@ public class CertificateServiceImpl implements CertificatesService {
     }
 
     @Override
+    @Transactional
     public CertificateDTO delete(int id) {
         List<TagDTO> tags = tagService.findByCertificateId(id);
         certificateTagService.deleteByCertificateId(id);

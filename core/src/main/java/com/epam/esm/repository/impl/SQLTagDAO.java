@@ -1,9 +1,7 @@
 package com.epam.esm.repository.impl;
 
-import com.epam.esm.model.Certificate;
 import com.epam.esm.model.Tag;
 import com.epam.esm.repository.TagDAO;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -70,9 +68,7 @@ public class SQLTagDAO implements TagDAO {
 
     @Override
     public Optional<Tag> update(Tag tag) {
-        if (jdbcTemplate.update(UPDATE_QUERY, tag.getName(), tag.getId()) == 0) {
-            //TODO: - Entity not updated exception
-        }
+        jdbcTemplate.update(UPDATE_QUERY, tag.getName(), tag.getId());
         return findById(tag.getId());
     }
 

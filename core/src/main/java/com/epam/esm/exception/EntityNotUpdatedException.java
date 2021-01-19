@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public class EntityNotUpdatedException extends ServiceException {
 
-    private final Integer errorCode = 4004;
+    private final String errorCode = "4003";
     private final Integer id;
 
 
@@ -13,4 +13,5 @@ public class EntityNotUpdatedException extends ServiceException {
         super(message);
         this.id = id;
     }
+
 }

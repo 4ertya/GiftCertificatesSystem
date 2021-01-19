@@ -21,11 +21,13 @@ public class CertificatesController {
 
     @GetMapping(produces = {"application/json"})
     public List<CertificateDTO> readAll(
-            @RequestParam(required = false) String tagName,
-            @RequestParam(required = false) String certificateName,
-            @RequestParam(required = false) String description
+            @RequestParam(required = false) String tag,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) String dateSort,
+            @RequestParam(required = false) String nameSort
     ) {
-        return certificatesService.readAll(tagName, certificateName, description);
+        return certificatesService.readAll(tag, name, description, dateSort, nameSort);
     }
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
@@ -35,7 +37,6 @@ public class CertificatesController {
 
     @PostMapping(value = "/new", produces = {"application/json"}, consumes = {"application/json"})
     public CertificateDTO create(@Validated(NewEntity.class) @RequestBody CertificateDTO certificateDTO) {
-        System.out.println(certificateDTO.getName());
         return certificatesService.create(certificateDTO);
     }
 
