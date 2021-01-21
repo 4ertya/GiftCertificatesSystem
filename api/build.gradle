@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'war'
+
 }
 
 group 'com.epam.esm'
@@ -11,6 +12,7 @@ repositories {
 }
 
 dependencies {
+
     implementation project(':core')
 
     providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
@@ -24,3 +26,4 @@ dependencies {
 
 
 }
+
