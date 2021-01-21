@@ -1,6 +1,3 @@
-rootProject.name = 'GiftCertificatesSystem'
-include 'persistence'
-include 'service'
-include 'web'
-include 'web'
+include 'api'
+include 'core'
 
