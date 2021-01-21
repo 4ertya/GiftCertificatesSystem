@@ -4,6 +4,7 @@ package com.epam.esm.dto;
 import com.epam.esm.validator.NewEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class CertificateDTO {
     @Null
     private Integer id;
