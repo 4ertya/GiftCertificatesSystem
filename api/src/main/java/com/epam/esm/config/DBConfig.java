@@ -9,29 +9,14 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
-public class DBConfig implements WebMvcConfigurer {
+public class DBConfig {
 
 
-//    private final ResourceLoader resourceLoader;
-//
-//    public DBConfig(ResourceLoader resourceLoader) {
-//        this.resourceLoader = resourceLoader;
-//    }
-
-    //    @PostConstruct
-//    protected void initialize(){
-//        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-//        populator.addScript(resourceLoader.getResource("classpath:/create_db.sql"));
-//        populator.addScript(resourceLoader.getResource("classpath:/insert.sql"));
-//        populator.setContinueOnError(false);
-//        DatabasePopulatorUtils.execute(populator , dataSource());
-//    }
     @Bean
     public TransactionManager transactionManager() {
         DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
