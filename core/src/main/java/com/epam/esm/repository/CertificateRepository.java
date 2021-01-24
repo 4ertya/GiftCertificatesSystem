@@ -9,15 +9,15 @@ import java.util.Optional;
 
 public interface CertificateRepository {
 
-    List<Certificate> readAll();
+    List<Certificate> findAllCertificates();
 
-    List<Certificate> readAllBySpecification(Specification specification);
+    List<Certificate> findAllCertificatesBySpecification(Specification specification);
 
-    Optional<Certificate> read(long id);
+    Optional<Certificate> findCertificateById(long id);
 
-    Certificate create(Certificate certificate);
+    Certificate createCertificate(Certificate certificate);
 
-    void update(Certificate certificate);
+    void updateCertificate(Certificate certificate);
 
-    void delete(long id);
+    void deleteCertificate(long id);
 }

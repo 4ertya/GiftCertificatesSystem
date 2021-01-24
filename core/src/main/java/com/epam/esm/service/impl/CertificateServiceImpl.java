@@ -33,16 +33,16 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     @Transactional
-    public List<CertificateDTO> readAll(String tagName, String partName, String partDescription, String dateSort, String nameSort) {
+    public List<CertificateDTO> findAllCertificates(String tagName, String partName, String partDescription, String dateSort, String nameSort) {
         Optional<Specification> receiveSpecification = specificationCreator.receiveSpecification(tagName, partName, partDescription, dateSort, nameSort);
 
-        List<Certificate> certificates = receiveSpecification.isPresent() ? certificateRepository.readAllBySpecification(receiveSpecification.get()) : certificateRepository.readAll();
+        List<Certificate> certificates = receiveSpecification.isPresent() ? certificateRepository.findAllCertificatesBySpecification(receiveSpecification.get()) : certificateRepository.findAllCertificates();
         if (certificates.isEmpty()) {
             return null;
         }
         List<CertificateDTO> certificateDTOS = new ArrayList<>();
         for (Certificate certificate : certificates) {
-            List<TagDTO> tags = tagService.findByCertificateId(certificate.getId());
+            List<TagDTO> tags = tagService.findTagByCertificateId(certificate.getId());
             certificateDTOS.add(certificateMapper.toDto(certificate, tags));
         }
         return certificateDTOS;
@@ -50,52 +50,52 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     @Transactional
-    public CertificateDTO read(long id) {
-        Certificate certificate = certificateRepository.read(id)
+    public CertificateDTO findCertificateById(long id) {
+        Certificate certificate = certificateRepository.findCertificateById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Certificate"));
-        List<TagDTO> tags = tagService.findByCertificateId(id);
+        List<TagDTO> tags = tagService.findTagByCertificateId(id);
         return certificateMapper.toDto(certificate, tags);
     }
 
     @Override
     @Transactional
-    public CertificateDTO create(CertificateDTO certificateDTO) {
-        Certificate certificate = certificateRepository.create(certificateMapper.toEntity(certificateDTO));
+    public CertificateDTO createCertificate(CertificateDTO certificateDTO) {
+        Certificate certificate = certificateRepository.createCertificate(certificateMapper.toEntity(certificateDTO));
         for (TagDTO tagDTO : certificateDTO.getTags()) {
-            long tagId = tagService.create(tagDTO).getId();
+            long tagId = tagService.createTag(tagDTO).getId();
             certificateTagService.add(certificate.getId(), tagId);
         }
-        List<TagDTO> tags = tagService.findByCertificateId(certificate.getId());
-        Certificate created = certificateRepository.read(certificate.getId()).get();
+        List<TagDTO> tags = tagService.findTagByCertificateId(certificate.getId());
+        Certificate created = certificateRepository.findCertificateById(certificate.getId()).get();
         return certificateMapper.toDto(created, tags);
     }
 
     @Override
     @Transactional
-    public CertificateDTO update(CertificateDTO certificateDTO) {
-        certificateRepository.read(certificateDTO.getId()).orElseThrow(() -> new EntityNotFoundException("Certificate"));
+    public CertificateDTO updateCertificate(CertificateDTO certificateDTO) {
+        certificateRepository.findCertificateById(certificateDTO.getId()).orElseThrow(() -> new EntityNotFoundException("Certificate"));
         Certificate newCertificate = certificateMapper.toEntity(certificateDTO);
         newCertificate.setId(certificateDTO.getId());
-        certificateRepository.update(newCertificate);
+        certificateRepository.updateCertificate(newCertificate);
         updateTags(certificateDTO);
-        List<TagDTO> tags = tagService.findByCertificateId(certificateDTO.getId());
-        Certificate updated = certificateRepository.read(certificateDTO.getId()).get();
+        List<TagDTO> tags = tagService.findTagByCertificateId(certificateDTO.getId());
+        Certificate updated = certificateRepository.findCertificateById(certificateDTO.getId()).get();
         return certificateMapper.toDto(updated, tags);
     }
 
     @Override
     @Transactional
-    public void delete(long id) {
-        certificateRepository.read(id).orElseThrow(() -> new EntityNotFoundException("Certificate"));
+    public void deleteCertificate(long id) {
+        certificateRepository.findCertificateById(id).orElseThrow(() -> new EntityNotFoundException("Certificate"));
         certificateTagService.deleteByCertificateId(id);
-        certificateRepository.delete(id);
+        certificateRepository.deleteCertificate(id);
     }
 
     private void updateTags(CertificateDTO certificateDTO) {
         if (certificateDTO.getTags() != null) {
             certificateTagService.deleteByCertificateId(certificateDTO.getId());
             for (TagDTO tagDTO : certificateDTO.getTags()) {
-                TagDTO tag = tagService.create(tagDTO);
+                TagDTO tag = tagService.createTag(tagDTO);
                 if (tag != null) {
                     long tagId = tag.getId();
                     certificateTagService.add(certificateDTO.getId(), tagId);

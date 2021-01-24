@@ -48,10 +48,10 @@ class TagServiceImplTest {
             List<Tag> tags = Stream.of(tag).collect(Collectors.toList());
             List<TagDTO> tagDTOS = new ArrayList<>();
 
-            when(tagRepository.findAll()).thenReturn(tags);
+            when(tagRepository.findAllTags()).thenReturn(tags);
             when(tagMapper.toDtoList(tags)).thenReturn(tagDTOS);
 
-            List<TagDTO> actual = tagService.readAllTags();
+            List<TagDTO> actual = tagService.findAllTags();
             assertEquals(tagDTOS, actual);
         }
 
@@ -61,10 +61,10 @@ class TagServiceImplTest {
 
             List<Tag> tags = new ArrayList<>();
 
-            when(tagRepository.findAll()).thenReturn(tags);
+            when(tagRepository.findAllTags()).thenReturn(tags);
             when(tagMapper.toDtoList(new ArrayList<>())).thenReturn(null);
 
-            List<TagDTO> actual = tagService.readAllTags();
+            List<TagDTO> actual = tagService.findAllTags();
 
             assertNull(actual);
         }
@@ -79,10 +79,10 @@ class TagServiceImplTest {
             Tag tag = new Tag();
             TagDTO tagDTO = new TagDTO();
 
-            when(tagRepository.findByTagId(tagId)).thenReturn(Optional.of(tag));
+            when(tagRepository.findTagById(tagId)).thenReturn(Optional.of(tag));
             when(tagMapper.toDto(tag)).thenReturn(tagDTO);
 
-            TagDTO actual = tagService.read(tagId);
+            TagDTO actual = tagService.findTagById(tagId);
 
             assertEquals(tagDTO, actual);
         }
@@ -91,9 +91,9 @@ class TagServiceImplTest {
         void readUnsuccessful() {
             int tagId = 1;
 
-            when(tagRepository.findByTagId(tagId)).thenReturn(Optional.empty());
+            when(tagRepository.findTagById(tagId)).thenReturn(Optional.empty());
 
-            assertThrows(EntityNotFoundException.class, () -> tagService.read(tagId));
+            assertThrows(EntityNotFoundException.class, () -> tagService.findTagById(tagId));
         }
     }
 
@@ -108,10 +108,10 @@ class TagServiceImplTest {
             List<TagDTO> tagDTOS = Stream.of(tagDTO).collect(Collectors.toList());
             List<Tag> tags = Stream.of(tag).collect(Collectors.toList());
 
-            when(tagRepository.findByCertificateId(certificateId)).thenReturn(tags);
+            when(tagRepository.findTagByCertificateId(certificateId)).thenReturn(tags);
             when(tagMapper.toDtoList(tags)).thenReturn(tagDTOS);
 
-            List<TagDTO> actual = tagService.findByCertificateId(certificateId);
+            List<TagDTO> actual = tagService.findTagByCertificateId(certificateId);
 
             assertEquals(tagDTOS, actual);
         }
@@ -120,9 +120,9 @@ class TagServiceImplTest {
         void readUnsuccessful() {
             int certificateId = 1;
 
-            when(tagRepository.findByCertificateId(certificateId)).thenReturn(new ArrayList<>());
+            when(tagRepository.findTagByCertificateId(certificateId)).thenReturn(new ArrayList<>());
             when(tagMapper.toDtoList(new ArrayList<>())).thenReturn(null);
-            List<TagDTO> actual = tagService.findByCertificateId(certificateId);
+            List<TagDTO> actual = tagService.findTagByCertificateId(certificateId);
             assertNull(actual);
         }
     }
@@ -138,10 +138,10 @@ class TagServiceImplTest {
             tagDTO.setId(1L);
             Tag tag = new Tag();
             tag.setId(1L);
-            when(tagRepository.findByTagName(tagDTO.getName())).thenReturn(Optional.empty());
+            when(tagRepository.findTagByName(tagDTO.getName())).thenReturn(Optional.empty());
             when(tagMapper.toEntity(tagDTO)).thenReturn(tag);
-            when(tagRepository.create(tag)).thenReturn(tag);
-            TagDTO actual = tagService.create(tagDTO);
+            when(tagRepository.createTag(tag)).thenReturn(tag);
+            TagDTO actual = tagService.createTag(tagDTO);
             assertEquals(tagDTO, actual);
         }
 
@@ -157,12 +157,12 @@ class TagServiceImplTest {
             TagDTO tagDTO = new TagDTO();
             tagDTO.setId(tagId);
             Tag tag = new Tag();
-            when(tagRepository.findByTagId(tagId)).thenReturn(Optional.of(tag));
+            when(tagRepository.findTagById(tagId)).thenReturn(Optional.of(tag));
             when(tagMapper.toEntity(tagDTO)).thenReturn(tag);
 
-            TagDTO actual = tagService.update(tagDTO);
+            TagDTO actual = tagService.updateTag(tagDTO);
             assertEquals(tagDTO, actual);
-            verify(tagRepository).update(tag);
+            verify(tagRepository).updateTag(tag);
         }
 
         @Test
@@ -171,8 +171,8 @@ class TagServiceImplTest {
             long tagId = 1;
             TagDTO tagDTO = new TagDTO();
             tagDTO.setId(tagId);
-            when(tagRepository.findByTagId(tagId)).thenReturn(Optional.empty());
-            assertThrows(EntityNotFoundException.class, () -> tagService.update(tagDTO));
+            when(tagRepository.findTagById(tagId)).thenReturn(Optional.empty());
+            assertThrows(EntityNotFoundException.class, () -> tagService.updateTag(tagDTO));
         }
     }
 
@@ -183,10 +183,10 @@ class TagServiceImplTest {
         @Test
         void deleteSuccessful() {
             long tagId = 1;
-            when(tagRepository.findByTagId(tagId)).thenReturn(Optional.of(new Tag()));
-            tagService.delete(tagId);
+            when(tagRepository.findTagById(tagId)).thenReturn(Optional.of(new Tag()));
+            tagService.deleteTag(tagId);
             verify(certificateTagService).deleteByTagId(tagId);
-            verify(tagRepository).delete(tagId);
+            verify(tagRepository).deleteTag(tagId);
         }
     }
 }

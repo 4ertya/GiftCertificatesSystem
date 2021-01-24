@@ -37,24 +37,24 @@ public class CertificatesRepositoryImpl implements CertificateRepository {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<Certificate> readAll() {
+    public List<Certificate> findAllCertificates() {
         return jdbcTemplate.query(READ_ALL_CERTIFICATES, new BeanPropertyRowMapper<>(Certificate.class));
     }
 
     @Override
-    public List<Certificate> readAllBySpecification(Specification specification) {
+    public List<Certificate> findAllCertificatesBySpecification(Specification specification) {
         return jdbcTemplate.query(READ_ALL_CERTIFICATES_BY_SPECIFICATION + specification.toSqlRequest(), specification.receiveParameters(), new BeanPropertyRowMapper<>(Certificate.class));
     }
 
     @Override
-    public Optional<Certificate> read(long id) {
+    public Optional<Certificate> findCertificateById(long id) {
         return jdbcTemplate.query(READ_CERTIFICATE_BY_ID, new Object[]{id}, new BeanPropertyRowMapper<>(Certificate.class))
                 .stream()
                 .findAny();
     }
 
     @Override
-    public Certificate create(Certificate certificate) {
+    public Certificate createCertificate(Certificate certificate) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("name", certificate.getName())
@@ -67,12 +67,12 @@ public class CertificatesRepositoryImpl implements CertificateRepository {
     }
 
     @Override
-    public void update(Certificate certificate) {
+    public void updateCertificate(Certificate certificate) {
         jdbcTemplate.update(UPDATE_BY_ID_QUERY, certificate.getName(), certificate.getDescription(), certificate.getPrice(), certificate.getDuration(), certificate.getId());
     }
 
     @Override
-    public void delete(long id) {
+    public void deleteCertificate(long id) {
         jdbcTemplate.update(DELETE_BY_ID_QUERY, id);
     }
 }

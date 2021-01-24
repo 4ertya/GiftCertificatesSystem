@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface CertificateService {
 
-    List<CertificateDTO> readAll(String tagName, String partName, String partDescription, String dateSort, String nameSort);
+    List<CertificateDTO> findAllCertificates(String tagName, String partName, String partDescription, String dateSort, String nameSort);
 
-    CertificateDTO read(long id);
+    CertificateDTO findCertificateById(long id);
 
-    CertificateDTO create(CertificateDTO certificateDTO);
+    CertificateDTO createCertificate(CertificateDTO certificateDTO);
 
-    CertificateDTO update(CertificateDTO certificateDTO);
+    CertificateDTO updateCertificate(CertificateDTO certificateDTO);
 
-    void delete(long id);
+    void deleteCertificate(long id);
 }

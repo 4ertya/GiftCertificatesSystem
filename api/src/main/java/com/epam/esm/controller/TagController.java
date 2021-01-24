@@ -18,30 +18,30 @@ public class TagController {
 
     @GetMapping()
     public List<TagDTO> readAll() {
-        return tagService.readAllTags();
+        return tagService.findAllTags();
     }
 
     @GetMapping("/{id}")
     public TagDTO read(@PathVariable("id") int id) {
-        return tagService.read(id);
+        return tagService.findTagById(id);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/new")
     public TagDTO create(@Validated @RequestBody TagDTO tagDTO) {
-        return tagService.create(tagDTO);
+        return tagService.createTag(tagDTO);
     }
 
     @PatchMapping("/{id}")
     public TagDTO update(@PathVariable("id") long id,@RequestBody TagDTO tagDTO) {
         tagDTO.setId(id);
-        return tagService.update(tagDTO);
+        return tagService.updateTag(tagDTO);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") int id) {
-        tagService.delete(id);
+        tagService.deleteTag(id);
     }
 
 

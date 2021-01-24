@@ -34,24 +34,24 @@ public class TagRepositoryImpl implements TagRepository {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<Tag> findAll() {
+    public List<Tag> findAllTags() {
         return jdbcTemplate.query(SELECT_ALL_QUERY, new BeanPropertyRowMapper<>(Tag.class));
     }
 
     @Override
-    public Optional<Tag> findByTagId(long id) {
+    public Optional<Tag> findTagById(long id) {
         return jdbcTemplate.query(SELECT_BY_ID_QUERY, new Object[]{id}, new BeanPropertyRowMapper<>(Tag.class))
                 .stream()
                 .findAny();
     }
 
     @Override
-    public List<Tag> findByCertificateId(long id) {
+    public List<Tag> findTagByCertificateId(long id) {
         return jdbcTemplate.query(SELECT_BY_CERTIFICATE_ID_QUERY, new Object[]{id}, new BeanPropertyRowMapper<>(Tag.class));
     }
 
     @Override
-    public Tag create(Tag tag) {
+    public Tag createTag(Tag tag) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("name", tag.getName());
@@ -62,17 +62,17 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public void update(Tag tag) {
+    public void updateTag(Tag tag) {
         jdbcTemplate.update(UPDATE_QUERY, tag.getName(), tag.getId());
     }
 
     @Override
-    public void delete(long id) {
+    public void deleteTag(long id) {
         jdbcTemplate.update(DELETE_QUERY, id);
     }
 
     @Override
-    public Optional<Tag> findByTagName(String name) {
+    public Optional<Tag> findTagByName(String name) {
         return jdbcTemplate.query(SELECT_BY_NAME_QUERY, new Object[]{name}, new BeanPropertyRowMapper<>(Tag.class))
                 .stream()
                 .findAny();

@@ -24,49 +24,49 @@ public class TagServiceImpl implements TagService {
 
 
     @Override
-    public List<TagDTO> readAllTags() {
-        List<Tag> tags = tagRepository.findAll();
+    public List<TagDTO> findAllTags() {
+        List<Tag> tags = tagRepository.findAllTags();
         return tagMapper.toDtoList(tags);
     }
 
     @Override
-    public TagDTO read(long id) {
-        Tag tag = tagRepository.findByTagId(id).orElseThrow(() -> new EntityNotFoundException("Tag"));
+    public TagDTO findTagById(long id) {
+        Tag tag = tagRepository.findTagById(id).orElseThrow(() -> new EntityNotFoundException("Tag"));
         return tagMapper.toDto(tag);
     }
 
     @Override
-    public List<TagDTO> findByCertificateId(long certificateId) {
-        List<Tag> tags = tagRepository.findByCertificateId(certificateId);
+    public List<TagDTO> findTagByCertificateId(long certificateId) {
+        List<Tag> tags = tagRepository.findTagByCertificateId(certificateId);
         return tagMapper.toDtoList(tags);
     }
 
     @Override
-    public TagDTO create(TagDTO tagDTO) {
-        Optional<Tag> tag = tagRepository.findByTagName(tagDTO.getName());
+    public TagDTO createTag(TagDTO tagDTO) {
+        Optional<Tag> tag = tagRepository.findTagByName(tagDTO.getName());
         if (tag.isPresent()) {
             tagDTO.setId(tag.get().getId());
         } else {
-            Tag created = tagRepository.create(tagMapper.toEntity(tagDTO));
+            Tag created = tagRepository.createTag(tagMapper.toEntity(tagDTO));
             tagDTO.setId(created.getId());
         }
         return tagDTO;
     }
 
     @Override
-    public TagDTO update(TagDTO tagDTO) {
-        tagRepository.findByTagId(tagDTO.getId()).orElseThrow(() -> new EntityNotFoundException("Tag"));
+    public TagDTO updateTag(TagDTO tagDTO) {
+        tagRepository.findTagById(tagDTO.getId()).orElseThrow(() -> new EntityNotFoundException("Tag"));
         Tag tag = tagMapper.toEntity(tagDTO);
         tag.setId(tagDTO.getId());
-        tagRepository.update(tag);
+        tagRepository.updateTag(tag);
         return tagDTO;
     }
 
     @Override
     @Transactional
-    public void delete(long id) {
-        tagRepository.findByTagId(id).orElseThrow(() -> new EntityNotFoundException("Tag"));
+    public void deleteTag(long id) {
+        tagRepository.findTagById(id).orElseThrow(() -> new EntityNotFoundException("Tag"));
         certificateTagService.deleteByTagId(id);
-        tagRepository.delete(id);
+        tagRepository.deleteTag(id);
     }
 }

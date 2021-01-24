@@ -6,15 +6,15 @@ import java.util.List;
 
 public interface TagService {
 
-    List<TagDTO> readAllTags();
+    List<TagDTO> findAllTags();
 
-    TagDTO read(long id);
+    TagDTO findTagById(long id);
 
-    List<TagDTO> findByCertificateId(long certificateId);
+    List<TagDTO> findTagByCertificateId(long certificateId);
 
-    TagDTO create(TagDTO tagDTO);
+    TagDTO createTag(TagDTO tagDTO);
 
-    TagDTO update(TagDTO tagDTO);
+    TagDTO updateTag(TagDTO tagDTO);
 
-    void delete(long id);
+    void deleteTag(long id);
 }

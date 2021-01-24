@@ -26,28 +26,28 @@ public class CertificateController {
             @RequestParam(required = false) String dateSort,
             @RequestParam(required = false) String nameSort
     ) {
-        return certificateService.readAll(tag, name, description, dateSort, nameSort);
+        return certificateService.findAllCertificates(tag, name, description, dateSort, nameSort);
     }
 
     @GetMapping("/{id}")
     public CertificateDTO read(@PathVariable("id") long id) {
-        return certificateService.read(id);
+        return certificateService.findCertificateById(id);
     }
 
     @PostMapping
     public CertificateDTO create(@Validated(NewEntity.class) @RequestBody CertificateDTO certificateDTO) {
-        return certificateService.create(certificateDTO);
+        return certificateService.createCertificate(certificateDTO);
     }
 
     @PatchMapping("/{id}")
     public CertificateDTO update(@PathVariable("id") long id, @Valid @RequestBody CertificateDTO certificateDTO) {
         certificateDTO.setId(id);
-        return certificateService.update(certificateDTO);
+        return certificateService.updateCertificate(certificateDTO);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") long id) {
-        certificateService.delete(id);
+        certificateService.deleteCertificate(id);
     }
 
 }

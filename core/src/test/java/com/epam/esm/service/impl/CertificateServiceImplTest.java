@@ -62,11 +62,11 @@ class CertificateServiceImplTest {
             CertificateDTO certificateDTO = new CertificateDTO();
             List<CertificateDTO> certificateDTOS = Stream.of(certificateDTO).collect(Collectors.toList());
 
-            when(certificateRepository.readAll()).thenReturn(certificates);
-            when(tagService.findByCertificateId(expectedCertificateId)).thenReturn(tagDTOS);
+            when(certificateRepository.findAllCertificates()).thenReturn(certificates);
+            when(tagService.findTagByCertificateId(expectedCertificateId)).thenReturn(tagDTOS);
             when(certificateMapper.toDto(certificate, tagDTOS)).thenReturn(certificateDTO);
 
-            List<CertificateDTO> actual = certificatesService.readAll(null, null, null, null, null);
+            List<CertificateDTO> actual = certificatesService.findAllCertificates(null, null, null, null, null);
 
             assertEquals(certificateDTOS, actual);
         }
@@ -84,11 +84,11 @@ class CertificateServiceImplTest {
             Specification specification = new CertificatesBySpecification(new ArrayList<>());
 
             when(specificationCreator.receiveSpecification("tag", "partOfName", "partOfdescription", "dateSort", "nameSort")).thenReturn(Optional.of(specification));
-            when(certificateRepository.readAllBySpecification(specification)).thenReturn(certificates);
-            when(tagService.findByCertificateId(expectedCertificateId)).thenReturn(tagDTOS);
+            when(certificateRepository.findAllCertificatesBySpecification(specification)).thenReturn(certificates);
+            when(tagService.findTagByCertificateId(expectedCertificateId)).thenReturn(tagDTOS);
             when(certificateMapper.toDto(certificate, tagDTOS)).thenReturn(certificateDTO);
 
-            List<CertificateDTO> actual = certificatesService.readAll("tag", "partOfName", "partOfdescription", "dateSort", "nameSort");
+            List<CertificateDTO> actual = certificatesService.findAllCertificates("tag", "partOfName", "partOfdescription", "dateSort", "nameSort");
 
             assertEquals(certificateDTOS, actual);
         }
@@ -100,9 +100,9 @@ class CertificateServiceImplTest {
             Specification specification = new CertificatesBySpecification(new ArrayList<>());
 
             when(specificationCreator.receiveSpecification("tag", "partOfName", "partOfdescription", "dateSort", "nameSort")).thenReturn(Optional.of(specification));
-            when(certificateRepository.readAllBySpecification(specification)).thenReturn(new ArrayList<>());
+            when(certificateRepository.findAllCertificatesBySpecification(specification)).thenReturn(new ArrayList<>());
 
-            List<CertificateDTO> actual = certificatesService.readAll("tag", "partOfName", "partOfdescription", "dateSort", "nameSort");
+            List<CertificateDTO> actual = certificatesService.findAllCertificates("tag", "partOfName", "partOfdescription", "dateSort", "nameSort");
 
             assertNull(actual);
         }
@@ -119,11 +119,11 @@ class CertificateServiceImplTest {
                     "description", BigDecimal.valueOf(100), 30, new ArrayList<>());
 
 
-            when(certificateRepository.read(expectedCertificateId)).thenReturn(Optional.of(new Certificate()));
-            when(tagService.findByCertificateId(expectedCertificateId)).thenReturn(new ArrayList<>());
+            when(certificateRepository.findCertificateById(expectedCertificateId)).thenReturn(Optional.of(new Certificate()));
+            when(tagService.findTagByCertificateId(expectedCertificateId)).thenReturn(new ArrayList<>());
             when(certificateMapper.toDto(new Certificate(), new ArrayList<>())).thenReturn(expected);
 
-            CertificateDTO actualCertificateDto = certificatesService.read(expectedCertificateId);
+            CertificateDTO actualCertificateDto = certificatesService.findCertificateById(expectedCertificateId);
 
             assertEquals(expected, actualCertificateDto);
         }
@@ -133,9 +133,9 @@ class CertificateServiceImplTest {
         void readUnsuccessful() {
             int expectedCertificateId = 1;
 
-            when(certificateRepository.read(expectedCertificateId)).thenReturn(Optional.empty());
+            when(certificateRepository.findCertificateById(expectedCertificateId)).thenReturn(Optional.empty());
 
-            assertThrows(EntityNotFoundException.class, () -> certificatesService.read(expectedCertificateId));
+            assertThrows(EntityNotFoundException.class, () -> certificatesService.findCertificateById(expectedCertificateId));
         }
     }
 
@@ -156,13 +156,13 @@ class CertificateServiceImplTest {
             certificate.setId(expectedId);
 
             when(certificateMapper.toEntity(certificateDTO)).thenReturn(certificate);
-            when(certificateRepository.create(certificate)).thenReturn(certificate);
-            when(tagService.create(tagDTO)).thenReturn(tagDTO);
-            when(tagService.findByCertificateId(expectedId)).thenReturn(tagDTOs);
-            when(certificateRepository.read(expectedId)).thenReturn(Optional.of(certificate));
+            when(certificateRepository.createCertificate(certificate)).thenReturn(certificate);
+            when(tagService.createTag(tagDTO)).thenReturn(tagDTO);
+            when(tagService.findTagByCertificateId(expectedId)).thenReturn(tagDTOs);
+            when(certificateRepository.findCertificateById(expectedId)).thenReturn(Optional.of(certificate));
             when(certificateMapper.toDto(certificate, tagDTOs)).thenReturn(certificateDTO);
 
-            CertificateDTO actual = certificatesService.create(certificateDTO);
+            CertificateDTO actual = certificatesService.createCertificate(certificateDTO);
 
             assertEquals(certificateDTO, actual);
             verify(certificateTagService).add(expectedId, expectedId);
@@ -184,17 +184,17 @@ class CertificateServiceImplTest {
             certificateDTO.setTags(tagDTOs);
             Certificate certificate = new Certificate();
             certificate.setId(expectedId);
-            when(certificateRepository.read(expectedId)).thenReturn(Optional.of(certificate));
+            when(certificateRepository.findCertificateById(expectedId)).thenReturn(Optional.of(certificate));
             when(certificateMapper.toEntity(certificateDTO)).thenReturn(certificate);
-            when(tagService.create(tagDTO)).thenReturn(tagDTO);
-            when(tagService.findByCertificateId(expectedId)).thenReturn(tagDTOs);
+            when(tagService.createTag(tagDTO)).thenReturn(tagDTO);
+            when(tagService.findTagByCertificateId(expectedId)).thenReturn(tagDTOs);
             when(certificateMapper.toDto(certificate, tagDTOs)).thenReturn(certificateDTO);
 
-            CertificateDTO actual = certificatesService.update(certificateDTO);
+            CertificateDTO actual = certificatesService.updateCertificate(certificateDTO);
 
             assertEquals(certificateDTO, actual);
             verify(certificateTagService).add(expectedId, expectedId);
-            verify(certificateRepository).update(certificate);
+            verify(certificateRepository).updateCertificate(certificate);
         }
 
         @Test
@@ -203,8 +203,8 @@ class CertificateServiceImplTest {
             CertificateDTO certificateDTO = new CertificateDTO();
             certificateDTO.setId(expectedId);
 
-            when(certificateRepository.read(expectedId)).thenThrow(new EntityNotFoundException("Certificate"));
-            assertThrows(EntityNotFoundException.class, ()->certificatesService.update(certificateDTO));
+            when(certificateRepository.findCertificateById(expectedId)).thenThrow(new EntityNotFoundException("Certificate"));
+            assertThrows(EntityNotFoundException.class, ()->certificatesService.updateCertificate(certificateDTO));
         }
     }
 
@@ -218,19 +218,19 @@ class CertificateServiceImplTest {
             certificate.setId(expectedId);
             CertificateDTO certificateDTO = new CertificateDTO();
             certificateDTO.setId(expectedId);
-            when(certificateRepository.read(expectedId)).thenReturn(Optional.of(certificate));
-            certificatesService.delete(expectedId);
+            when(certificateRepository.findCertificateById(expectedId)).thenReturn(Optional.of(certificate));
+            certificatesService.deleteCertificate(expectedId);
             verify(certificateTagService).deleteByCertificateId(expectedId);
-            verify(certificateRepository).delete(expectedId);
+            verify(certificateRepository).deleteCertificate(expectedId);
         }
 
         @Test
         void deleteUnsuccessful() {
             long expectedId =1;
 
-            when(certificateRepository.read(expectedId)).thenThrow(new EntityNotFoundException("Certificate"));
+            when(certificateRepository.findCertificateById(expectedId)).thenThrow(new EntityNotFoundException("Certificate"));
 
-            assertThrows(EntityNotFoundException.class,()->certificatesService.delete(expectedId));
+            assertThrows(EntityNotFoundException.class,()->certificatesService.deleteCertificate(expectedId));
         }
     }
 }
