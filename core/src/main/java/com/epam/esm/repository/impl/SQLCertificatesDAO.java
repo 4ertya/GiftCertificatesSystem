@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class SQLCertificatesDAO implements CertificateDAO {
 
 
@@ -49,7 +49,7 @@ public class SQLCertificatesDAO implements CertificateDAO {
     }
 
     @Override
-    public Optional<Certificate> read(int id) {
+    public Optional<Certificate> read(long id) {
         return jdbcTemplate.query(READ_CERTIFICATE_BY_ID, new Object[]{id}, new BeanPropertyRowMapper<>(Certificate.class))
                 .stream()
                 .findAny();
@@ -74,7 +74,7 @@ public class SQLCertificatesDAO implements CertificateDAO {
     }
 
     @Override
-    public Optional<Certificate> delete(int id) {
+    public Optional<Certificate> delete(long id) {
         Optional<Certificate> certificate = read(id);
         if (certificate.isPresent()) {
             jdbcTemplate.update(DELETE_BY_ID_QUERY, id);

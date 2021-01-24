@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class Tag {
-    Integer id;
-    String name;
+    private Long id;
+    private String name;
 
     public Tag(String name) {
         this.name = name;

@@ -2,8 +2,8 @@ package com.epam.esm.repository;
 
 public interface CertificateTagsDAO {
 
-    Integer add (int certificateId, int tagId);
-    Integer deleteByCertificateId (int certificateId);
-    Integer deleteByTagId (int certificateId);
-    Integer delete (int certificateId, int tagId);
+    Integer add (long certificateId, long tagId);
+    Integer deleteByCertificateId (long certificateId);
+    Integer deleteByTagId (long certificateId);
+    Integer delete (long certificateId, long tagId);
 }

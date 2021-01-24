@@ -23,6 +23,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -56,7 +57,7 @@ class CertificateServiceImplTest {
         @Test()
         @DisplayName("Read all certificates without specification")
         void readAllWithoutSpecification() {
-            int expectedCertificateId = 1;
+            long expectedCertificateId = 1;
             List<TagDTO> tagDTOS = new ArrayList<>();
             Certificate certificate = new Certificate();
             certificate.setId(expectedCertificateId);
@@ -76,7 +77,7 @@ class CertificateServiceImplTest {
         @Test()
         @DisplayName("Read all certificates by specification")
         void readAllBySpecification() {
-            int expectedCertificateId = 1;
+            long expectedCertificateId = 1;
             List<TagDTO> tagDTOS = new ArrayList<>();
             Certificate certificate = new Certificate();
             certificate.setId(expectedCertificateId);
@@ -118,7 +119,7 @@ class CertificateServiceImplTest {
         void readSuccessful() {
             int expectedCertificateId = 1;
             CertificateDTO expected = new CertificateDTO("name",
-                    "description", 100, 30, new ArrayList<>());
+                    "description", BigDecimal.valueOf(100), 30, new ArrayList<>());
 
 
             when(certificateDAO.read(expectedCertificateId)).thenReturn(Optional.of(new Certificate()));
@@ -148,7 +149,7 @@ class CertificateServiceImplTest {
         @Test
         @DisplayName("Successful")
         void createSuccessful() {
-            int expectedId = 1;
+            long expectedId = 1;
             TagDTO tagDTO = new TagDTO();
             tagDTO.setId(expectedId);
             List<TagDTO> tagDTOs = Stream.of(tagDTO).collect(Collectors.toList());
@@ -188,7 +189,7 @@ class CertificateServiceImplTest {
 
         @Test
         void updateSuccessful() {
-            int expectedId = 1;
+            long expectedId = 1;
             TagDTO tagDTO = new TagDTO();
             tagDTO.setId(expectedId);
             List<TagDTO> tagDTOs = Stream.of(tagDTO).collect(Collectors.toList());
@@ -211,7 +212,7 @@ class CertificateServiceImplTest {
 
         @Test
         void updateUnsuccessful() {
-            int expectedId=1;
+            long expectedId=1;
             CertificateDTO certificateDTO = new CertificateDTO();
             Certificate certificate = new Certificate();
 
@@ -227,7 +228,7 @@ class CertificateServiceImplTest {
     class Delete {
         @Test
         void deleteSuccessful() {
-            int expectedId =1;
+            long expectedId =1;
             List<TagDTO> tagDTOS = new ArrayList<>();
             Certificate certificate = new Certificate();
             certificate.setId(expectedId);
@@ -246,7 +247,7 @@ class CertificateServiceImplTest {
 
         @Test
         void deleteUnsuccessful() {
-            int expectedId =1;
+            long expectedId =1;
             List<TagDTO> tagDTOS = new ArrayList<>();
 
             when(tagService.findByCertificateId(expectedId)).thenReturn(tagDTOS);

@@ -39,14 +39,14 @@ public class SQLTagDAO implements TagDAO {
     }
 
     @Override
-    public Optional<Tag> findById(int id) {
+    public Optional<Tag> findById(long id) {
         return jdbcTemplate.query(SELECT_BY_ID_QUERY, new Object[]{id}, new BeanPropertyRowMapper<>(Tag.class))
                 .stream()
                 .findAny();
     }
 
     @Override
-    public List<Tag> findByCertificateId(int id) {
+    public List<Tag> findByCertificateId(long id) {
         return jdbcTemplate.query(SELECT_BY_CERTIFICATE_ID_QUERY, new Object[]{id}, new BeanPropertyRowMapper<>(Tag.class));
     }
 
@@ -73,7 +73,7 @@ public class SQLTagDAO implements TagDAO {
     }
 
     @Override
-    public Optional<Tag> delete(int id) {
+    public Optional<Tag> delete(long id) {
         Optional<Tag> tag = findById(id);
         if (tag.isPresent()) {
             jdbcTemplate.update(DELETE_QUERY, id);

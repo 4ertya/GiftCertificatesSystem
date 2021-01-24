@@ -6,10 +6,10 @@ import lombok.Getter;
 public class EntityNotUpdatedException extends ServiceException {
 
     private final String errorCode = "4003";
-    private final Integer id;
+    private final Long id;
 
 
-    public EntityNotUpdatedException(String message, int id) {
+    public EntityNotUpdatedException(String message, long id) {
         super(message);
         this.id = id;
     }

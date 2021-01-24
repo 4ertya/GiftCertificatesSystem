@@ -13,17 +13,17 @@ public class CertificateTagServiceImpl implements CertificateTagService {
     private final CertificateTagsDAO certificateTagsDAO;
 
     @Override
-    public Integer add(int certificateId, int tagId) {
+    public Integer add(long certificateId, long tagId) {
         return certificateTagsDAO.add(certificateId, tagId);
     }
 
     @Override
-    public Integer deleteByCertificateId(int certificateId) {
+    public Integer deleteByCertificateId(long certificateId) {
         return certificateTagsDAO.deleteByCertificateId(certificateId);
     }
 
     @Override
-    public Integer deleteByTagId(int tagId) {
+    public Integer deleteByTagId(long tagId) {
         return certificateTagsDAO.deleteByTagId(tagId);
     }
 

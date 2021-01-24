@@ -11,13 +11,13 @@ public interface TagDAO {
 
     List<Tag> findAll();
 
-    Optional<Tag> findById(int id);
+    Optional<Tag> findById(long id);
 
-    List<Tag> findByCertificateId(int id);
+    List<Tag> findByCertificateId(long id);
 
     Optional<Tag> create(Tag tag);
 
     Optional<Tag> update(Tag tag);
 
-    Optional<Tag> delete(int id);
+    Optional<Tag> delete(long id);
 }

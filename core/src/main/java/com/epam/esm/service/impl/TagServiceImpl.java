@@ -11,13 +11,12 @@ import com.epam.esm.repository.TagDAO;
 import com.epam.esm.service.CertificateTagService;
 import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
 
     private final TagDAO tagDAO;
@@ -32,13 +31,13 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagDTO read(int id) {
+    public TagDTO read(long id) {
         Tag tag = tagDAO.findById(id).orElseThrow(() -> new EntityNotFoundException("Tag"));
         return tagMapper.toDto(tag);
     }
 
     @Override
-    public List<TagDTO> findByCertificateId(int certificateId) {
+    public List<TagDTO> findByCertificateId(long certificateId) {
         List<Tag> tags = tagDAO.findByCertificateId(certificateId);
         return tags.isEmpty() ? null : tagMapper.toDtoList(tags);
     }
@@ -50,7 +49,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagDTO update(int id, TagDTO tagDTO) {
+    public TagDTO update(long id, TagDTO tagDTO) {
         Tag tag = tagMapper.toEntity(tagDTO);
         tag.setId(id);
         Tag updatedTag = tagDAO.update(tag).orElseThrow(() -> new EntityNotUpdatedException("Tag", id));
@@ -58,7 +57,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagDTO delete(int id) {
+    public TagDTO delete(long id) {
         certificateTagService.deleteByTagId(id);
         Tag tag = tagDAO.delete(id).orElseThrow(()-> new EntityNotDeletedException("Tag", id));
         return tagMapper.toDto(tag);

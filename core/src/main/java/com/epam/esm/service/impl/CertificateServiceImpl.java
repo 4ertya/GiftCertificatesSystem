@@ -16,7 +16,6 @@ import com.epam.esm.service.CertificateTagService;
 import com.epam.esm.service.CertificatesService;
 import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class CertificateServiceImpl implements CertificatesService {
 
     private final CertificateDAO certificateDAO;
@@ -54,7 +53,7 @@ public class CertificateServiceImpl implements CertificatesService {
 
     @Override
     @Transactional
-    public CertificateDTO read(int id) {
+    public CertificateDTO read(long id) {
         Certificate certificate = certificateDAO.read(id)
                 .orElseThrow(() -> new EntityNotFoundException("Certificate"));
         List<TagDTO> tags = tagService.findByCertificateId(id);
@@ -68,7 +67,7 @@ public class CertificateServiceImpl implements CertificatesService {
         Certificate certificate = certificateDAO.create(certificateMapper.toEntity(certificateDTO))
                 .orElseThrow(() -> new EntityNotAddedException("Certificate"));
         for (TagDTO tagDTO : certificateDTO.getTags()) {
-            int tagId = tagService.create(tagDTO).getId();
+            long tagId = tagService.create(tagDTO).getId();
             certificateTagService.add(certificate.getId(), tagId);
         }
         List<TagDTO> tags = tagService.findByCertificateId(certificate.getId());
@@ -77,7 +76,7 @@ public class CertificateServiceImpl implements CertificatesService {
 
     @Override
     @Transactional
-    public CertificateDTO update(int id, CertificateDTO certificateDTO) {
+    public CertificateDTO update(long id, CertificateDTO certificateDTO) {
         Certificate newCertificate = certificateMapper.toEntity(certificateDTO);
         newCertificate.setId(id);
         Certificate certificate = certificateDAO.update(newCertificate).orElseThrow(() -> new EntityNotUpdatedException("Certificate", id));
@@ -85,7 +84,7 @@ public class CertificateServiceImpl implements CertificatesService {
             for (TagDTO tagDTO : certificateDTO.getTags()) {
                 TagDTO tag = tagService.create(tagDTO);
                 if (tag != null) {
-                    int tagId = tag.getId();
+                    long tagId = tag.getId();
                     certificateTagService.add(certificate.getId(), tagId);
                 }
             }
@@ -96,7 +95,7 @@ public class CertificateServiceImpl implements CertificatesService {
 
     @Override
     @Transactional
-    public CertificateDTO delete(int id) {
+    public CertificateDTO delete(long id) {
         List<TagDTO> tags = tagService.findByCertificateId(id);
         certificateTagService.deleteByCertificateId(id);
         Certificate certificate = certificateDAO.delete(id).orElseThrow(() -> new EntityNotDeletedException("Certificate", id));

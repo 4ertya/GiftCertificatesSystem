@@ -139,7 +139,7 @@ class TagServiceImplTest {
             TagServiceImpl temp = spy(tagService);
             TagDTO tagDTO = new TagDTO();
             Tag tag = new Tag();
-            tag.setId(1);
+            tag.setId(1L);
             when(tagMapper.toEntity(tagDTO)).thenReturn(tag);
             when(tagDAO.create(tag)).thenReturn(Optional.of(tag));
             doReturn(tagDTO).when(temp).read(tag.getId());

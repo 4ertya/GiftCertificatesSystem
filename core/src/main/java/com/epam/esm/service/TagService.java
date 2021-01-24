@@ -8,13 +8,13 @@ public interface TagService {
 
     List<TagDTO> readAll();
 
-    TagDTO read(int id);
+    TagDTO read(long id);
 
-    List<TagDTO> findByCertificateId(int certificateId);
+    List<TagDTO> findByCertificateId(long certificateId);
 
     TagDTO create(TagDTO tagDTO);
 
-    TagDTO update(int id, TagDTO tagDTO);
+    TagDTO update(long id, TagDTO tagDTO);
 
-    TagDTO delete(int id);
+    TagDTO delete(long id);
 }

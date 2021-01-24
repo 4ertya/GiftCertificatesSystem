@@ -13,12 +13,12 @@ public interface CertificateDAO {
 
     List<Certificate> readAllBySpecification(Specification specification);
 
-    Optional<Certificate> read(int id);
+    Optional<Certificate> read(long id);
 
     Optional<Certificate> create(Certificate certificate);
 
     Optional<Certificate> update(Certificate certificate);
 
-    Optional<Certificate> delete(int id);
+    Optional<Certificate> delete(long id);
 
 }

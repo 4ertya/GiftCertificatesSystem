@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CertificateDTO {
     @Null
-    private Integer id;
+    private Long id;
     @NotBlank(groups = {NewEntity.class})
     @Size(min = 3, max = 20)
     private String name;
@@ -30,7 +31,7 @@ public class CertificateDTO {
     private String description;
     @NotNull(groups = {NewEntity.class})
     @Min(value = 1,groups = {NewEntity.class})
-    private Integer price;
+    private BigDecimal price;
     @NotNull(groups = {NewEntity.class})
     @Min(value = 1,groups = {NewEntity.class})
     private Integer duration;
@@ -44,7 +45,7 @@ public class CertificateDTO {
     @NotEmpty(groups = {NewEntity.class})
     private List<TagDTO> tags;
 
-    public CertificateDTO(String name, String description, Integer price, Integer duration, List<TagDTO> tags) {
+    public CertificateDTO(String name, String description, BigDecimal price, Integer duration, List<TagDTO> tags) {
         this.name = name;
         this.description = description;
         this.price = price;

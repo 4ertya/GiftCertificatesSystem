@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TagDTO {
-    private Integer id;
+    private Long id;
     @NotBlank(groups = {NewEntity.class})
     @Size(min = 3, max = 10)
     private String name;
