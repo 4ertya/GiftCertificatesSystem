@@ -1,10 +1,9 @@
 package com.epam.esm.repository.impl;
 
 import com.epam.esm.model.Certificate;
-import com.epam.esm.repository.CertificateDAO;
+import com.epam.esm.repository.CertificateRepository;
 import com.epam.esm.repository.specification.Specification;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -19,7 +18,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class SQLCertificatesDAO implements CertificateDAO {
+public class CertificatesRepositoryImpl implements CertificateRepository {
 
 
     private final static String READ_ALL_CERTIFICATES_BY_SPECIFICATION = "SELECT certificates.* FROM certificates JOIN certificates_tags ct on certificates.id = ct.gift_certificates_id JOIN tags  on tags.id = ct.tags_id WHERE 1=1";
@@ -40,7 +39,6 @@ public class SQLCertificatesDAO implements CertificateDAO {
     @Override
     public List<Certificate> readAll() {
         return jdbcTemplate.query(READ_ALL_CERTIFICATES, new BeanPropertyRowMapper<>(Certificate.class));
-
     }
 
     @Override
@@ -56,7 +54,7 @@ public class SQLCertificatesDAO implements CertificateDAO {
     }
 
     @Override
-    public Optional<Certificate> create(Certificate certificate) {
+    public Certificate create(Certificate certificate) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("name", certificate.getName())
@@ -64,22 +62,18 @@ public class SQLCertificatesDAO implements CertificateDAO {
                 .addValue("price", certificate.getPrice())
                 .addValue("duration", certificate.getDuration());
         namedParameterJdbcTemplate.update(CREATE_CERTIFICATE, parameterSource, keyHolder, new String[]{"id"});
-        return keyHolder.getKey() != null ? read((Integer) keyHolder.getKey()) : Optional.empty();
-    }
-
-    @Override
-    public Optional<Certificate> update(Certificate certificate) {
-        int rows = jdbcTemplate.update(UPDATE_BY_ID_QUERY, certificate.getName(), certificate.getDescription(), certificate.getPrice(), certificate.getDuration(), certificate.getId());
-        return rows == 0 ? Optional.empty() : read(certificate.getId());
-    }
-
-    @Override
-    public Optional<Certificate> delete(long id) {
-        Optional<Certificate> certificate = read(id);
-        if (certificate.isPresent()) {
-            jdbcTemplate.update(DELETE_BY_ID_QUERY, id);
-        }
+        certificate.setId(keyHolder.getKey().longValue());
         return certificate;
+    }
+
+    @Override
+    public void update(Certificate certificate) {
+        jdbcTemplate.update(UPDATE_BY_ID_QUERY, certificate.getName(), certificate.getDescription(), certificate.getPrice(), certificate.getDuration(), certificate.getId());
+    }
+
+    @Override
+    public void delete(long id) {
+        jdbcTemplate.update(DELETE_BY_ID_QUERY, id);
     }
 }
 

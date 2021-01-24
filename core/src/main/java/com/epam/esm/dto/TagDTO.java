@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 public class TagDTO {
     private Long id;
     @NotBlank(groups = {NewEntity.class})
-    @Size(min = 3, max = 10)
+    @Size(min = 3, max = 10,groups = {NewEntity.class})
     private String name;
 
 }

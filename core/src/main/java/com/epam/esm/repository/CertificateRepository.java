@@ -7,7 +7,7 @@ import com.epam.esm.repository.specification.Specification;
 import java.util.List;
 import java.util.Optional;
 
-public interface CertificateDAO {
+public interface CertificateRepository {
 
     List<Certificate> readAll();
 
@@ -15,10 +15,9 @@ public interface CertificateDAO {
 
     Optional<Certificate> read(long id);
 
-    Optional<Certificate> create(Certificate certificate);
+    Certificate create(Certificate certificate);
 
-    Optional<Certificate> update(Certificate certificate);
+    void update(Certificate certificate);
 
-    Optional<Certificate> delete(long id);
-
+    void delete(long id);
 }

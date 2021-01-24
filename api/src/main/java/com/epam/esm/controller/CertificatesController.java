@@ -31,7 +31,7 @@ public class CertificatesController {
     }
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    public CertificateDTO read(@PathVariable("id") int id) {
+    public CertificateDTO read(@PathVariable("id") long id) {
         return certificatesService.read(id);
     }
 
@@ -41,13 +41,14 @@ public class CertificatesController {
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"}, consumes = {"application/json"})
-    public CertificateDTO update(@PathVariable("id") int id, @Valid @RequestBody CertificateDTO certificateDTO) {
-        return certificatesService.update(id, certificateDTO);
+    public CertificateDTO update(@PathVariable("id") long id, @Valid @RequestBody CertificateDTO certificateDTO) {
+        certificateDTO.setId(id);
+        return certificatesService.update(certificateDTO);
     }
 
     @DeleteMapping(value = "/{id}", produces = {"application/json"})
-    public CertificateDTO delete(@PathVariable("id") int id) {
-        return certificatesService.delete(id);
+    public void delete(@PathVariable("id") long id) {
+        certificatesService.delete(id);
     }
 
 }
