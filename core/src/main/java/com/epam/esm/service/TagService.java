@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TagService {
 
-    List<TagDTO> readAll();
+    List<TagDTO> readAllTags();
 
     TagDTO read(long id);
 
@@ -14,7 +14,7 @@ public interface TagService {
 
     TagDTO create(TagDTO tagDTO);
 
-    TagDTO update(long id, TagDTO tagDTO);
+    TagDTO update(TagDTO tagDTO);
 
-    TagDTO delete(long id);
+    void delete(long id);
 }

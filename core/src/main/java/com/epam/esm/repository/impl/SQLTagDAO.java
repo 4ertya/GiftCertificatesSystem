@@ -39,7 +39,7 @@ public class SQLTagDAO implements TagDAO {
     }
 
     @Override
-    public Optional<Tag> findById(long id) {
+    public Optional<Tag> findByTagId(long id) {
         return jdbcTemplate.query(SELECT_BY_ID_QUERY, new Object[]{id}, new BeanPropertyRowMapper<>(Tag.class))
                 .stream()
                 .findAny();
@@ -51,37 +51,28 @@ public class SQLTagDAO implements TagDAO {
     }
 
     @Override
-    public Optional<Tag> create(Tag tag) {
+    public Tag create(Tag tag) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        Optional<Tag> temp = findByName(tag.getName());
-
-        if (temp.isPresent()) {
-            return temp;
-        }
-
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("name", tag.getName());
         namedParameterJdbcTemplate.update(INSERT_QUERY, parameterSource, keyHolder, new String[]{"id"});
+        tag.setId(keyHolder.getKey().longValue());
 
-        return keyHolder.getKey() != null ? findById((Integer) keyHolder.getKey()) : Optional.empty();
-    }
-
-    @Override
-    public Optional<Tag> update(Tag tag) {
-        jdbcTemplate.update(UPDATE_QUERY, tag.getName(), tag.getId());
-        return findById(tag.getId());
-    }
-
-    @Override
-    public Optional<Tag> delete(long id) {
-        Optional<Tag> tag = findById(id);
-        if (tag.isPresent()) {
-            jdbcTemplate.update(DELETE_QUERY, id);
-        }
         return tag;
     }
 
-    private Optional<Tag> findByName(String name) {
+    @Override
+    public void update(Tag tag) {
+        jdbcTemplate.update(UPDATE_QUERY, tag.getName(), tag.getId());
+    }
+
+    @Override
+    public void delete(long id) {
+        jdbcTemplate.update(DELETE_QUERY, id);
+    }
+
+    @Override
+    public Optional<Tag> findByTagName(String name) {
         return jdbcTemplate.query(SELECT_BY_NAME_QUERY, new Object[]{name}, new BeanPropertyRowMapper<>(Tag.class))
                 .stream()
                 .findAny();

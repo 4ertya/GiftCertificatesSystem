@@ -1,10 +1,7 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dto.TagDTO;
-import com.epam.esm.exception.EntityNotAddedException;
-import com.epam.esm.exception.EntityNotDeletedException;
 import com.epam.esm.exception.EntityNotFoundException;
-import com.epam.esm.exception.EntityNotUpdatedException;
 import com.epam.esm.mapper.TagMapper;
 import com.epam.esm.model.Tag;
 import com.epam.esm.repository.TagDAO;
@@ -12,8 +9,10 @@ import com.epam.esm.service.CertificateTagService;
 import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,41 +24,49 @@ public class TagServiceImpl implements TagService {
 
 
     @Override
-    public List<TagDTO> readAll() {
+    public List<TagDTO> readAllTags() {
         List<Tag> tags = tagDAO.findAll();
-        return tags.isEmpty() ? null : tagMapper.toDtoList(tagDAO.findAll());
+        return tagMapper.toDtoList(tags);
     }
 
     @Override
     public TagDTO read(long id) {
-        Tag tag = tagDAO.findById(id).orElseThrow(() -> new EntityNotFoundException("Tag"));
+        Tag tag = tagDAO.findByTagId(id).orElseThrow(() -> new EntityNotFoundException("Tag"));
         return tagMapper.toDto(tag);
     }
 
     @Override
     public List<TagDTO> findByCertificateId(long certificateId) {
         List<Tag> tags = tagDAO.findByCertificateId(certificateId);
-        return tags.isEmpty() ? null : tagMapper.toDtoList(tags);
+        return tagMapper.toDtoList(tags);
     }
 
     @Override
     public TagDTO create(TagDTO tagDTO) {
-        Tag tag = tagDAO.create(tagMapper.toEntity(tagDTO)).orElseThrow(() -> new EntityNotAddedException("Tag"));
-        return read(tag.getId());
+        Optional<Tag> tag = tagDAO.findByTagName(tagDTO.getName());
+        if (tag.isPresent()) {
+            tagDTO.setId(tag.get().getId());
+        } else {
+            Tag created = tagDAO.create(tagMapper.toEntity(tagDTO));
+            tagDTO.setId(created.getId());
+        }
+        return tagDTO;
     }
 
     @Override
-    public TagDTO update(long id, TagDTO tagDTO) {
+    public TagDTO update(TagDTO tagDTO) {
+        tagDAO.findByTagId(tagDTO.getId()).orElseThrow(() -> new EntityNotFoundException("Tag"));
         Tag tag = tagMapper.toEntity(tagDTO);
-        tag.setId(id);
-        Tag updatedTag = tagDAO.update(tag).orElseThrow(() -> new EntityNotUpdatedException("Tag", id));
-        return tagMapper.toDto(updatedTag);
+        tag.setId(tagDTO.getId());
+        tagDAO.update(tag);
+        return tagDTO;
     }
 
     @Override
-    public TagDTO delete(long id) {
+    @Transactional
+    public void delete(long id) {
+        tagDAO.findByTagId(id).orElseThrow(() -> new EntityNotFoundException("Tag"));
         certificateTagService.deleteByTagId(id);
-        Tag tag = tagDAO.delete(id).orElseThrow(()-> new EntityNotDeletedException("Tag", id));
-        return tagMapper.toDto(tag);
+        tagDAO.delete(id);
     }
 }

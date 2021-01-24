@@ -11,13 +11,15 @@ public interface TagDAO {
 
     List<Tag> findAll();
 
-    Optional<Tag> findById(long id);
+    Optional<Tag> findByTagId(long id);
+
+    Optional<Tag> findByTagName(String name);
 
     List<Tag> findByCertificateId(long id);
 
-    Optional<Tag> create(Tag tag);
+    Tag create(Tag tag);
 
-    Optional<Tag> update(Tag tag);
+    void update(Tag tag);
 
-    Optional<Tag> delete(long id);
+    void delete(long id);
 }
