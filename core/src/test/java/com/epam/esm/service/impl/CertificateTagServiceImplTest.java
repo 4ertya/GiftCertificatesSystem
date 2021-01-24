@@ -1,6 +1,6 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.repository.CertificateTagsDAO;
+import com.epam.esm.repository.CertificateTagRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,7 +17,7 @@ public class CertificateTagServiceImplTest {
     private CertificateTagServiceImpl certificateTagService;
 
     @Mock
-    private CertificateTagsDAO certificateTagsDAO;
+    private CertificateTagRepository certificateTagRepository;
 
 
     @Test
@@ -25,7 +25,7 @@ public class CertificateTagServiceImplTest {
         int certificateId = 1;
         int tagId = 1;
         int rows = 1;
-        when(certificateTagsDAO.add(certificateId, tagId)).thenReturn(rows);
+        when(certificateTagRepository.add(certificateId, tagId)).thenReturn(rows);
         int actual = certificateTagService.add(certificateId, tagId);
         assertEquals(rows, actual);
     }
@@ -34,7 +34,7 @@ public class CertificateTagServiceImplTest {
     void deleteByCertificateId() {
         int certificateId = 1;
         int rows = 1;
-        when(certificateTagsDAO.deleteByCertificateId(certificateId)).thenReturn(rows);
+        when(certificateTagRepository.deleteByCertificateId(certificateId)).thenReturn(rows);
         int actual = certificateTagService.deleteByCertificateId(certificateId);
         assertEquals(rows, actual);
     }
@@ -43,7 +43,7 @@ public class CertificateTagServiceImplTest {
     void deleteByTagId() {
         int tagId = 1;
         int rows = 1;
-        when(certificateTagsDAO.deleteByTagId(tagId)).thenReturn(rows);
+        when(certificateTagRepository.deleteByTagId(tagId)).thenReturn(rows);
         int actual = certificateTagService.deleteByTagId(tagId);
         assertEquals(rows, actual);
     }

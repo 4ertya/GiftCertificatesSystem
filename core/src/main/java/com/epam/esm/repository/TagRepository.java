@@ -7,7 +7,7 @@ import com.epam.esm.model.Tag;
 import java.util.List;
 import java.util.Optional;
 
-public interface TagDAO {
+public interface TagRepository {
 
     List<Tag> findAll();
 

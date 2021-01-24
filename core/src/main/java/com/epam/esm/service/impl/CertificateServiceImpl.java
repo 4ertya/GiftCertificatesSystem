@@ -10,7 +10,7 @@ import com.epam.esm.repository.CertificateRepository;
 import com.epam.esm.repository.specification.Specification;
 import com.epam.esm.repository.specification.SpecificationCreator;
 import com.epam.esm.service.CertificateTagService;
-import com.epam.esm.service.CertificatesService;
+import com.epam.esm.service.CertificateService;
 import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CertificateServiceImpl implements CertificatesService {
+public class CertificateServiceImpl implements CertificateService {
 
     private final CertificateRepository certificateRepository;
     private final TagService tagService;

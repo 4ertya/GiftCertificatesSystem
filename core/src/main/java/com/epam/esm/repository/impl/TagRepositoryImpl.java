@@ -1,7 +1,7 @@
 package com.epam.esm.repository.impl;
 
 import com.epam.esm.model.Tag;
-import com.epam.esm.repository.TagDAO;
+import com.epam.esm.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class SQLTagDAO implements TagDAO {
+public class TagRepositoryImpl implements TagRepository {
 
     private final static String SELECT_ALL_QUERY = "SELECT * FROM tags;";
     private final static String SELECT_BY_ID_QUERY = "SELECT * FROM tags WHERE id=?;";

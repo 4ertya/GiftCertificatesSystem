@@ -1,13 +1,13 @@
 package com.epam.esm.repository.impl;
 
-import com.epam.esm.repository.CertificateTagsDAO;
+import com.epam.esm.repository.CertificateTagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class SQLCertificateTagsDAO implements CertificateTagsDAO {
+public class CertificateTagRepositoryImpl implements CertificateTagRepository {
 
     private final static String INSERT_QUERY = "INSERT INTO certificates_tags (gift_certificates_id, tags_id) VALUES (?,?) ON CONFLICT(gift_certificates_id, tags_id) DO NOTHING;";
     private final static String DELETE_QUERY = "DELETE FROM certificates_tags WHERE gift_certificates_id=? AND tags_id=? ";

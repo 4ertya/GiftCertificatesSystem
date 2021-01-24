@@ -11,7 +11,7 @@ public enum DataSortType {
     ASC("ASC"),
     DESC("DESC");
 
-    private String value;
+    private final String value;
 
     public static DataSortType getDataSortType(String requestSort){
         return Stream.of(values())

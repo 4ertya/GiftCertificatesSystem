@@ -2,7 +2,7 @@ package com.epam.esm.controller;
 
 
 import com.epam.esm.dto.CertificateDTO;
-import com.epam.esm.service.CertificatesService;
+import com.epam.esm.service.CertificateService;
 import com.epam.esm.validator.NewEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -14,9 +14,9 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/certificates")
-public class CertificatesController {
+public class CertificateController {
 
-    private final CertificatesService certificatesService;
+    private final CertificateService certificateService;
 
     @GetMapping
     public List<CertificateDTO> readAll(
@@ -26,28 +26,28 @@ public class CertificatesController {
             @RequestParam(required = false) String dateSort,
             @RequestParam(required = false) String nameSort
     ) {
-        return certificatesService.readAll(tag, name, description, dateSort, nameSort);
+        return certificateService.readAll(tag, name, description, dateSort, nameSort);
     }
 
     @GetMapping("/{id}")
     public CertificateDTO read(@PathVariable("id") long id) {
-        return certificatesService.read(id);
+        return certificateService.read(id);
     }
 
     @PostMapping
     public CertificateDTO create(@Validated(NewEntity.class) @RequestBody CertificateDTO certificateDTO) {
-        return certificatesService.create(certificateDTO);
+        return certificateService.create(certificateDTO);
     }
 
     @PatchMapping("/{id}")
     public CertificateDTO update(@PathVariable("id") long id, @Valid @RequestBody CertificateDTO certificateDTO) {
         certificateDTO.setId(id);
-        return certificatesService.update(certificateDTO);
+        return certificateService.update(certificateDTO);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") long id) {
-        certificatesService.delete(id);
+        certificateService.delete(id);
     }
 
 }
