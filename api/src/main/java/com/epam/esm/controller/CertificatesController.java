@@ -5,7 +5,6 @@ import com.epam.esm.dto.CertificateDTO;
 import com.epam.esm.service.CertificatesService;
 import com.epam.esm.validator.NewEntity;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,13 +12,13 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor(onConstructor = @__(@Autowired))
-@RequestMapping("/certificates")
+@AllArgsConstructor
+@RequestMapping("/api/certificates")
 public class CertificatesController {
 
     private final CertificatesService certificatesService;
 
-    @GetMapping(produces = {"application/json"})
+    @GetMapping
     public List<CertificateDTO> readAll(
             @RequestParam(required = false) String tag,
             @RequestParam(required = false) String name,
@@ -30,23 +29,23 @@ public class CertificatesController {
         return certificatesService.readAll(tag, name, description, dateSort, nameSort);
     }
 
-    @GetMapping(value = "/{id}", produces = {"application/json"})
+    @GetMapping("/{id}")
     public CertificateDTO read(@PathVariable("id") long id) {
         return certificatesService.read(id);
     }
 
-    @PostMapping(value = "/new", produces = {"application/json"}, consumes = {"application/json"})
+    @PostMapping
     public CertificateDTO create(@Validated(NewEntity.class) @RequestBody CertificateDTO certificateDTO) {
         return certificatesService.create(certificateDTO);
     }
 
-    @PatchMapping(value = "/{id}", produces = {"application/json"}, consumes = {"application/json"})
+    @PatchMapping("/{id}")
     public CertificateDTO update(@PathVariable("id") long id, @Valid @RequestBody CertificateDTO certificateDTO) {
         certificateDTO.setId(id);
         return certificatesService.update(certificateDTO);
     }
 
-    @DeleteMapping(value = "/{id}", produces = {"application/json"})
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") long id) {
         certificatesService.delete(id);
     }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tags")
+@RequestMapping("/api/tags")
 @RequiredArgsConstructor
 public class TagController {
 
@@ -27,7 +27,7 @@ public class TagController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "/new")
+    @PostMapping("/new")
     public TagDTO create(@Validated @RequestBody TagDTO tagDTO) {
         return tagService.create(tagDTO);
     }
