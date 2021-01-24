@@ -13,18 +13,18 @@ public class CertificateTagServiceImpl implements CertificateTagService {
     private final CertificateTagRepository certificateTagRepository;
 
     @Override
-    public Integer add(long certificateId, long tagId) {
-        return certificateTagRepository.add(certificateId, tagId);
+    public void add(long certificateId, long tagId) {
+        certificateTagRepository.add(certificateId, tagId);
     }
 
     @Override
-    public Integer deleteByCertificateId(long certificateId) {
-        return certificateTagRepository.deleteByCertificateId(certificateId);
+    public void deleteByCertificateId(long certificateId) {
+        certificateTagRepository.deleteByCertificateId(certificateId);
     }
 
     @Override
-    public Integer deleteByTagId(long tagId) {
-        return certificateTagRepository.deleteByTagId(tagId);
+    public void deleteByTagId(long tagId) {
+        certificateTagRepository.deleteByTagId(tagId);
     }
 
 }

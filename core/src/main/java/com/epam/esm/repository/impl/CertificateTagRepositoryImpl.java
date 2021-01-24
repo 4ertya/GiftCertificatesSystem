@@ -17,18 +17,18 @@ public class CertificateTagRepositoryImpl implements CertificateTagRepository {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public Integer add(long certificateId, long tagId) {
-        return jdbcTemplate.update(INSERT_QUERY, certificateId, tagId);
+    public void add(long certificateId, long tagId) {
+        jdbcTemplate.update(INSERT_QUERY, certificateId, tagId);
     }
 
     @Override
-    public Integer deleteByCertificateId(long certificateId) {
-        return jdbcTemplate.update(DELETE_BY_CERTIFICATE_ID_QUERY, certificateId);
+    public void deleteByCertificateId(long certificateId) {
+        jdbcTemplate.update(DELETE_BY_CERTIFICATE_ID_QUERY, certificateId);
     }
 
     @Override
-    public Integer deleteByTagId(long tagId) {
-        return jdbcTemplate.update(DELETE_BY_TAG_ID_QUERY, tagId);
+    public void deleteByTagId(long tagId) {
+        jdbcTemplate.update(DELETE_BY_TAG_ID_QUERY, tagId);
     }
 
     @Override

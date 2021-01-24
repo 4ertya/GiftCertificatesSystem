@@ -2,8 +2,8 @@ package com.epam.esm.service;
 
 public interface CertificateTagService {
 
-    Integer add(long certificateId, long tagId);
+    void add(long certificateId, long tagId);
 
-    Integer deleteByCertificateId(long certificateId);
-    Integer deleteByTagId(long tagId);
+    void deleteByCertificateId(long certificateId);
+    void deleteByTagId(long tagId);
 }

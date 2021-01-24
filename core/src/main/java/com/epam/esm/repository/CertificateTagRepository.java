@@ -2,11 +2,11 @@ package com.epam.esm.repository;
 
 public interface CertificateTagRepository {
 
-    Integer add(long certificateId, long tagId);
+    void add(long certificateId, long tagId);
 
-    Integer deleteByCertificateId(long certificateId);
+    void deleteByCertificateId(long certificateId);
 
-    Integer deleteByTagId(long certificateId);
+    void deleteByTagId(long certificateId);
 
     Integer delete(long certificateId, long tagId);
 }
