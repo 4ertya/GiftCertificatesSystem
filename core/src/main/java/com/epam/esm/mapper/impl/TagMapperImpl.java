@@ -12,11 +12,17 @@ import java.util.stream.Collectors;
 public class TagMapperImpl implements TagMapper {
     @Override
     public Tag toEntity(TagDTO tagDTO) {
+        if (tagDTO==null){
+            return null;
+        }
         return new Tag(tagDTO.getName());
     }
 
     @Override
     public TagDTO toDto(Tag tag) {
+        if (tag==null){
+            return null;
+        }
         TagDTO tagDTO = new TagDTO();
         tagDTO.setName(tag.getName());
         tagDTO.setId(tag.getId());
@@ -25,6 +31,9 @@ public class TagMapperImpl implements TagMapper {
 
     @Override
     public List<TagDTO> toDtoList(List<Tag> tags) {
+        if (tags==null){
+            return null;
+        }
         List<TagDTO> tagDTOs;
         tagDTOs = tags.stream().map(tag -> {
             TagDTO tagDTO = new TagDTO();

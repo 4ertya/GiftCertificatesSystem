@@ -15,6 +15,9 @@ public class CertificateMapperImpl implements CertificateMapper {
 
     @Override
     public Certificate toEntity(CertificateDTO certificateDTO) {
+        if (certificateDTO==null){
+            return null;
+        }
         Certificate certificate = new Certificate(
                 certificateDTO.getName(),
                 certificateDTO.getDescription(),
@@ -26,6 +29,9 @@ public class CertificateMapperImpl implements CertificateMapper {
 
     @Override
     public CertificateDTO toDto(Certificate certificate, List<TagDTO> tags) {
+        if (certificate==null){
+            return null;
+        }
         CertificateDTO certificateDTO = new CertificateDTO(
                 certificate.getName(),
                 certificate.getDescription(),
