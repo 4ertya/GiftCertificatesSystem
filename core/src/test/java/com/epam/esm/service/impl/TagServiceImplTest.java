@@ -155,11 +155,12 @@ class TagServiceImplTest {
         void updateSuccessful() {
             long tagId = 1;
             TagDTO tagDTO = new TagDTO();
+            tagDTO.setName("aaa");
             tagDTO.setId(tagId);
             Tag tag = new Tag();
+            tag.setName("aa");
             when(tagRepository.findTagById(tagId)).thenReturn(Optional.of(tag));
             when(tagMapper.toEntity(tagDTO)).thenReturn(tag);
-
             TagDTO actual = tagService.updateTag(tagDTO);
             assertEquals(tagDTO, actual);
             verify(tagRepository).updateTag(tag);

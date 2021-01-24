@@ -1,6 +1,7 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dto.CertificateDTO;
+import com.epam.esm.dto.DataSortType;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.mapper.CertificateMapper;
@@ -83,12 +84,12 @@ class CertificateServiceImplTest {
             List<CertificateDTO> certificateDTOS = Stream.of(certificateDTO).collect(Collectors.toList());
             Specification specification = new CertificatesBySpecification(new ArrayList<>());
 
-            when(specificationCreator.receiveSpecification("tag", "partOfName", "partOfdescription", "dateSort", "nameSort")).thenReturn(Optional.of(specification));
+            when(specificationCreator.receiveSpecification("tag", "partOfName", "partOfdescription", DataSortType.ASC, DataSortType.ASC)).thenReturn(Optional.of(specification));
             when(certificateRepository.findAllCertificatesBySpecification(specification)).thenReturn(certificates);
             when(tagService.findTagByCertificateId(expectedCertificateId)).thenReturn(tagDTOS);
             when(certificateMapper.toDto(certificate, tagDTOS)).thenReturn(certificateDTO);
 
-            List<CertificateDTO> actual = certificatesService.findAllCertificates("tag", "partOfName", "partOfdescription", "dateSort", "nameSort");
+            List<CertificateDTO> actual = certificatesService.findAllCertificates("tag", "partOfName", "partOfdescription", DataSortType.ASC, DataSortType.ASC);
 
             assertEquals(certificateDTOS, actual);
         }
@@ -99,10 +100,10 @@ class CertificateServiceImplTest {
 
             Specification specification = new CertificatesBySpecification(new ArrayList<>());
 
-            when(specificationCreator.receiveSpecification("tag", "partOfName", "partOfdescription", "dateSort", "nameSort")).thenReturn(Optional.of(specification));
+            when(specificationCreator.receiveSpecification("tag", "partOfName", "partOfdescription", DataSortType.ASC, DataSortType.ASC)).thenReturn(Optional.of(specification));
             when(certificateRepository.findAllCertificatesBySpecification(specification)).thenReturn(new ArrayList<>());
 
-            List<CertificateDTO> actual = certificatesService.findAllCertificates("tag", "partOfName", "partOfdescription", "dateSort", "nameSort");
+            List<CertificateDTO> actual = certificatesService.findAllCertificates("tag", "partOfName", "partOfdescription", DataSortType.ASC, DataSortType.ASC);
 
             assertNull(actual);
         }
@@ -203,7 +204,7 @@ class CertificateServiceImplTest {
             CertificateDTO certificateDTO = new CertificateDTO();
             certificateDTO.setId(expectedId);
 
-            when(certificateRepository.findCertificateById(expectedId)).thenThrow(new EntityNotFoundException("Certificate"));
+            when(certificateRepository.findCertificateById(expectedId)).thenThrow(new EntityNotFoundException());
             assertThrows(EntityNotFoundException.class, ()->certificatesService.updateCertificate(certificateDTO));
         }
     }
@@ -228,7 +229,7 @@ class CertificateServiceImplTest {
         void deleteUnsuccessful() {
             long expectedId =1;
 
-            when(certificateRepository.findCertificateById(expectedId)).thenThrow(new EntityNotFoundException("Certificate"));
+            when(certificateRepository.findCertificateById(expectedId)).thenThrow(new EntityNotFoundException());
 
             assertThrows(EntityNotFoundException.class,()->certificatesService.deleteCertificate(expectedId));
         }

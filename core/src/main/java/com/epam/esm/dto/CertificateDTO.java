@@ -2,13 +2,11 @@ package com.epam.esm.dto;
 
 
 import com.epam.esm.validator.NewEntity;
+import com.epam.esm.validator.UpdateEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.validation.annotation.Validated;
-
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -24,16 +22,16 @@ public class CertificateDTO {
     @Null
     private Long id;
     @NotBlank(groups = {NewEntity.class})
-    @Size(min = 3, max = 20)
+    @Size(min = 3, max = 20, groups = {NewEntity.class, UpdateEntity.class})
     private String name;
     @NotBlank(groups = {NewEntity.class})
-    @Size(min = 3, max = 45, groups = {NewEntity.class})
+    @Size(min = 3, max = 45, groups = {NewEntity.class, UpdateEntity.class})
     private String description;
     @NotNull(groups = {NewEntity.class})
-    @Min(value = 1,groups = {NewEntity.class})
+    @Min(value = 1, groups = {NewEntity.class, UpdateEntity.class})
     private BigDecimal price;
     @NotNull(groups = {NewEntity.class})
-    @Min(value = 1,groups = {NewEntity.class})
+    @Min(value = 1, groups = {NewEntity.class, UpdateEntity.class})
     private Integer duration;
     @Null
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")

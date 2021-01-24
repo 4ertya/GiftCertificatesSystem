@@ -13,7 +13,7 @@ public class CertificatesSortByDateSpecification implements Specification {
 
     @Override
     public String toSqlRequest() {
-        return sqlRequest + "certificates.create_date " + dataSortType.getValue();
+        return sqlRequest + "certificates.create_date " + dataSortType.name();
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.epam.esm.service.impl;
 
 
 import com.epam.esm.dto.CertificateDTO;
+import com.epam.esm.dto.DataSortType;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.mapper.CertificateMapper;
@@ -33,7 +34,7 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     @Transactional
-    public List<CertificateDTO> findAllCertificates(String tagName, String partName, String partDescription, String dateSort, String nameSort) {
+    public List<CertificateDTO> findAllCertificates(String tagName, String partName, String partDescription, DataSortType dateSort, DataSortType nameSort) {
         Optional<Specification> receiveSpecification = specificationCreator.receiveSpecification(tagName, partName, partDescription, dateSort, nameSort);
 
         List<Certificate> certificates = receiveSpecification.isPresent() ? certificateRepository.findAllCertificatesBySpecification(receiveSpecification.get()) : certificateRepository.findAllCertificates();
@@ -52,7 +53,7 @@ public class CertificateServiceImpl implements CertificateService {
     @Transactional
     public CertificateDTO findCertificateById(long id) {
         Certificate certificate = certificateRepository.findCertificateById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Certificate"));
+                .orElseThrow(EntityNotFoundException::new);
         List<TagDTO> tags = tagService.findTagByCertificateId(id);
         return certificateMapper.toDto(certificate, tags);
     }
@@ -73,7 +74,7 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     @Transactional
     public CertificateDTO updateCertificate(CertificateDTO certificateDTO) {
-        certificateRepository.findCertificateById(certificateDTO.getId()).orElseThrow(() -> new EntityNotFoundException("Certificate"));
+        certificateRepository.findCertificateById(certificateDTO.getId()).orElseThrow(EntityNotFoundException::new);
         Certificate newCertificate = certificateMapper.toEntity(certificateDTO);
         newCertificate.setId(certificateDTO.getId());
         certificateRepository.updateCertificate(newCertificate);
@@ -86,7 +87,7 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     @Transactional
     public void deleteCertificate(long id) {
-        certificateRepository.findCertificateById(id).orElseThrow(() -> new EntityNotFoundException("Certificate"));
+        certificateRepository.findCertificateById(id).orElseThrow(EntityNotFoundException::new);
         certificateTagService.deleteByCertificateId(id);
         certificateRepository.deleteCertificate(id);
     }

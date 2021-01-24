@@ -2,18 +2,18 @@ package com.epam.esm.repository.specification;
 
 import com.epam.esm.dto.DataSortType;
 import com.epam.esm.repository.specification.impl.*;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Component
 public class SpecificationCreator {
     private final static String ORDER_BY = " ORDER BY ";
     private final static String DELIMITER = ", ";
 
-    public Optional<Specification> receiveSpecification(String tagName, String partOfName, String partOfDescription, String dateSort, String nameSort) {
+    public Optional<Specification> receiveSpecification(String tagName, String partOfName, String partOfDescription, DataSortType dateSort, DataSortType nameSort) {
         List<Specification> specifications = new ArrayList<>();
         boolean isTwoSort = false;
 
@@ -31,13 +31,13 @@ public class SpecificationCreator {
 
         specifications.add(new CertificatesGroupByIdSpecification());
 
-        if (DataSortType.getDataSortType(dateSort) != null) {
-            specifications.add(new CertificatesSortByDateSpecification(ORDER_BY, DataSortType.getDataSortType(dateSort)));
+        if (dateSort != null) {
+            specifications.add(new CertificatesSortByDateSpecification(ORDER_BY, dateSort));
             isTwoSort = true;
         }
 
-        if (DataSortType.getDataSortType(nameSort) != null) {
-            specifications.add(new CertificatesSortByNameSpecification(isTwoSort ? DELIMITER : ORDER_BY, DataSortType.getDataSortType(nameSort)));
+        if (nameSort != null) {
+            specifications.add(new CertificatesSortByNameSpecification(isTwoSort ? DELIMITER : ORDER_BY, nameSort));
         }
 
         if (specifications.size() == 1) {

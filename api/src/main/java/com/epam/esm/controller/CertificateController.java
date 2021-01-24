@@ -2,18 +2,22 @@ package com.epam.esm.controller;
 
 
 import com.epam.esm.dto.CertificateDTO;
+import com.epam.esm.dto.DataSortType;
 import com.epam.esm.service.CertificateService;
 import com.epam.esm.validator.NewEntity;
+import com.epam.esm.validator.UpdateEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/certificates")
+@Validated
 public class CertificateController {
 
     private final CertificateService certificateService;
@@ -23,14 +27,14 @@ public class CertificateController {
             @RequestParam(required = false) String tag,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String description,
-            @RequestParam(required = false) String dateSort,
-            @RequestParam(required = false) String nameSort
+            @RequestParam(required = false) DataSortType dateSort,
+            @RequestParam(required = false) DataSortType nameSort
     ) {
         return certificateService.findAllCertificates(tag, name, description, dateSort, nameSort);
     }
 
     @GetMapping("/{id}")
-    public CertificateDTO read(@PathVariable("id") long id) {
+    public CertificateDTO read(@PathVariable("id") @Valid @Min(1) long id) {
         return certificateService.findCertificateById(id);
     }
 
@@ -40,7 +44,7 @@ public class CertificateController {
     }
 
     @PatchMapping("/{id}")
-    public CertificateDTO update(@PathVariable("id") long id, @Valid @RequestBody CertificateDTO certificateDTO) {
+    public CertificateDTO update(@PathVariable("id") long id, @Validated(UpdateEntity.class) @RequestBody CertificateDTO certificateDTO) {
         certificateDTO.setId(id);
         return certificateService.updateCertificate(certificateDTO);
     }
@@ -49,5 +53,6 @@ public class CertificateController {
     public void delete(@PathVariable("id") long id) {
         certificateService.deleteCertificate(id);
     }
+
 
 }

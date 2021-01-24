@@ -12,7 +12,7 @@ public class CertificatesSortByNameSpecification implements Specification {
 
     @Override
     public String toSqlRequest() {
-        return sqlRequest+ "certificates.name " + dataSortType.getValue();
+        return sqlRequest+ "certificates.name " + dataSortType.name();
     }
 
     @Override

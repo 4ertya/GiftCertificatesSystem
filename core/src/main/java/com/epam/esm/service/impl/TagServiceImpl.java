@@ -1,6 +1,7 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dto.TagDTO;
+import com.epam.esm.exception.EntityAlreadyExistException;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.mapper.TagMapper;
 import com.epam.esm.model.Tag;
@@ -31,7 +32,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDTO findTagById(long id) {
-        Tag tag = tagRepository.findTagById(id).orElseThrow(() -> new EntityNotFoundException("Tag"));
+        Tag tag = tagRepository.findTagById(id).orElseThrow(EntityNotFoundException::new);
         return tagMapper.toDto(tag);
     }
 
@@ -55,7 +56,10 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDTO updateTag(TagDTO tagDTO) {
-        tagRepository.findTagById(tagDTO.getId()).orElseThrow(() -> new EntityNotFoundException("Tag"));
+        tagRepository.findTagById(tagDTO.getId()).orElseThrow(EntityNotFoundException::new);
+        if (tagRepository.findTagByName(tagDTO.getName()).isPresent()) {
+            throw new EntityAlreadyExistException();
+        }
         Tag tag = tagMapper.toEntity(tagDTO);
         tag.setId(tagDTO.getId());
         tagRepository.updateTag(tag);
@@ -65,7 +69,7 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void deleteTag(long id) {
-        tagRepository.findTagById(id).orElseThrow(() -> new EntityNotFoundException("Tag"));
+        tagRepository.findTagById(id).orElseThrow(EntityNotFoundException::new);
         certificateTagService.deleteByTagId(id);
         tagRepository.deleteTag(id);
     }
