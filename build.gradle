@@ -1,3 +1,4 @@
+
 group 'com.epam.esm'
 version '1.0'
 
@@ -28,3 +29,4 @@ subprojects {
         implementation 'org.slf4j:jcl-over-slf4j:1.7.12'
     }
 }
+
