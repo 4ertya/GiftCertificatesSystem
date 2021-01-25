@@ -5,7 +5,7 @@ create table if not exists certificates
     id               serial  not null,
     name             text    not null,
     description      text,
-    price            integer not null         default 0,
+    price            numeric not null,
     duration         integer not null,
     create_date      timestamp with time zone default now(),
     last_update_date timestamp with time zone default now(),
