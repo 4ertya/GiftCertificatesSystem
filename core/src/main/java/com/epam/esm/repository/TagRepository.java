@@ -21,4 +21,10 @@ public interface TagRepository {
     void updateTag(Tag tag);
 
     void deleteTag(long id);
+
+    void bind(long certificateId, long tagId);
+
+    void unbindByCertificateId(long certificateId);
+
+    void unbindByTagId(long certificateId);
 }

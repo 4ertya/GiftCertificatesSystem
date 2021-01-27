@@ -3,10 +3,10 @@ package com.epam.esm.repository.impl;
 import com.epam.esm.config.EmbeddedTestConfig;
 import com.epam.esm.model.Certificate;
 import com.epam.esm.repository.CertificateRepository;
-import com.epam.esm.repository.CertificateTagRepository;
+import com.epam.esm.repository.TagRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,16 +16,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 @Transactional
-@ComponentScan("com.epam.esm")
 @SpringJUnitConfig(EmbeddedTestConfig.class)
 class CertificatesRepositoryImplTest {
 
     @Autowired
     private CertificateRepository certificateRepository;
     @Autowired
-    private CertificateTagRepository certificateTagRepository;
+    private TagRepository tagRepository;
 
     @Test
     void findAllCertificates() {
@@ -43,7 +41,7 @@ class CertificatesRepositoryImplTest {
         certificate3.setLastUpdateDate(LocalDateTime.of(2021, 1, 20, 18, 0, 0, 0));
         List<Certificate> expected = Arrays.asList(certificate1,certificate2,certificate3);
         List<Certificate> actual = certificateRepository.findAllCertificates();
-        assertEquals(expected,actual);
+        Assertions.assertEquals(expected,actual);
     }
 
     @Test
@@ -57,7 +55,7 @@ class CertificatesRepositoryImplTest {
         expected.setCreateDate(LocalDateTime.of(2021, 1, 1, 18, 0, 0, 0));
         expected.setLastUpdateDate(LocalDateTime.of(2021, 1, 1, 18, 0, 0, 0));
         Certificate actual = certificateRepository.findCertificateById(1).get();
-        assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -65,7 +63,7 @@ class CertificatesRepositoryImplTest {
         Certificate expected = new Certificate("new", "new", BigDecimal.valueOf(12.2), 10);
         expected.setId(4L);
         Certificate actual = certificateRepository.createCertificate(expected);
-        assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -76,13 +74,13 @@ class CertificatesRepositoryImplTest {
         certificateRepository.updateCertificate(expected);
         Certificate actual = certificateRepository.findCertificateById(1).get();
         expected.setLastUpdateDate(actual.getLastUpdateDate());
-        assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
     void deleteCertificate() {
-        certificateTagRepository.deleteByCertificateId(1);
+        tagRepository.unbindByCertificateId(1);
         certificateRepository.deleteCertificate(1);
-        assertEquals(Optional.empty(), certificateRepository.findCertificateById(1));
+        Assertions.assertEquals(Optional.empty(), certificateRepository.findCertificateById(1));
     }
 }

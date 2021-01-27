@@ -17,4 +17,10 @@ public interface TagService {
     TagDTO updateTag(TagDTO tagDTO);
 
     void deleteTag(long id);
+
+    void bind(long certificateId, long tagId);
+
+    void unbindByCertificateId(long certificateId);
+
+    void unbindByTagId(long tagId);
 }

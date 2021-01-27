@@ -5,7 +5,6 @@ import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.mapper.TagMapper;
 import com.epam.esm.model.Tag;
 import com.epam.esm.repository.TagRepository;
-import com.epam.esm.service.CertificateTagService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -35,8 +34,7 @@ class TagServiceImplTest {
     private TagRepository tagRepository;
     @Mock
     private TagMapper tagMapper;
-    @Mock
-    CertificateTagService certificateTagService;
+
 
     @Nested
     @SuiteDisplayName("ReadAll()")
@@ -186,7 +184,7 @@ class TagServiceImplTest {
             long tagId = 1;
             when(tagRepository.findTagById(tagId)).thenReturn(Optional.of(new Tag()));
             tagService.deleteTag(tagId);
-            verify(certificateTagService).deleteByTagId(tagId);
+            verify(tagRepository).unbindByTagId(tagId);
             verify(tagRepository).deleteTag(tagId);
         }
     }

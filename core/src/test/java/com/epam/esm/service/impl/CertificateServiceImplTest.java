@@ -10,7 +10,6 @@ import com.epam.esm.repository.CertificateRepository;
 import com.epam.esm.repository.specification.Specification;
 import com.epam.esm.repository.specification.SpecificationCreator;
 import com.epam.esm.repository.specification.impl.CertificatesBySpecification;
-import com.epam.esm.service.CertificateTagService;
 import com.epam.esm.service.TagService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -46,8 +45,7 @@ class CertificateServiceImplTest {
     CertificateMapper certificateMapper;
     @Mock
     SpecificationCreator specificationCreator;
-    @Mock
-    CertificateTagService certificateTagService;
+
 
     @Nested
     @SuiteDisplayName("ReadAll()")
@@ -166,7 +164,7 @@ class CertificateServiceImplTest {
             CertificateDTO actual = certificatesService.createCertificate(certificateDTO);
 
             assertEquals(certificateDTO, actual);
-            verify(certificateTagService).add(expectedId, expectedId);
+            verify(tagService).bind(expectedId, expectedId);
         }
     }
 
@@ -194,7 +192,7 @@ class CertificateServiceImplTest {
             CertificateDTO actual = certificatesService.updateCertificate(certificateDTO);
 
             assertEquals(certificateDTO, actual);
-            verify(certificateTagService).add(expectedId, expectedId);
+            verify(tagService).bind(expectedId, expectedId);
             verify(certificateRepository).updateCertificate(certificate);
         }
 
@@ -221,7 +219,7 @@ class CertificateServiceImplTest {
             certificateDTO.setId(expectedId);
             when(certificateRepository.findCertificateById(expectedId)).thenReturn(Optional.of(certificate));
             certificatesService.deleteCertificate(expectedId);
-            verify(certificateTagService).deleteByCertificateId(expectedId);
+            verify(tagService).unbindByCertificateId(expectedId);
             verify(certificateRepository).deleteCertificate(expectedId);
         }
 

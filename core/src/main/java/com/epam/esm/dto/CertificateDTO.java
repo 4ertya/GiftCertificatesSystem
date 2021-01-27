@@ -19,24 +19,24 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CertificateDTO {
-    @Null
+    @Null(groups = {NewEntity.class, UpdateEntity.class})
     private Long id;
     @NotBlank(groups = {NewEntity.class})
-    @Size(min = 3, max = 20, groups = {NewEntity.class, UpdateEntity.class})
+    @Size(min = 3, max = 45, groups = {NewEntity.class, UpdateEntity.class})
     private String name;
     @NotBlank(groups = {NewEntity.class})
-    @Size(min = 3, max = 45, groups = {NewEntity.class, UpdateEntity.class})
+    @Size(min = 3, groups = {NewEntity.class, UpdateEntity.class})
     private String description;
     @NotNull(groups = {NewEntity.class})
-    @Min(value = 1, groups = {NewEntity.class, UpdateEntity.class})
+    @Min(value = 0, groups = {NewEntity.class, UpdateEntity.class})
     private BigDecimal price;
     @NotNull(groups = {NewEntity.class})
     @Min(value = 1, groups = {NewEntity.class, UpdateEntity.class})
     private Integer duration;
-    @Null
+    @Null(groups = {NewEntity.class, UpdateEntity.class})
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime createDate;
-    @Null
+    @Null(groups = {NewEntity.class, UpdateEntity.class})
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime lastUpdateDate;
     @Valid

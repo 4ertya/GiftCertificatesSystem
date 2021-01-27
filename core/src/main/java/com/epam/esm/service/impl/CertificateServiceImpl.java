@@ -10,7 +10,6 @@ import com.epam.esm.model.Certificate;
 import com.epam.esm.repository.CertificateRepository;
 import com.epam.esm.repository.specification.Specification;
 import com.epam.esm.repository.specification.SpecificationCreator;
-import com.epam.esm.service.CertificateTagService;
 import com.epam.esm.service.CertificateService;
 import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,6 @@ public class CertificateServiceImpl implements CertificateService {
 
     private final CertificateRepository certificateRepository;
     private final TagService tagService;
-    private final CertificateTagService certificateTagService;
     private final CertificateMapper certificateMapper;
     private final SpecificationCreator specificationCreator;
 
@@ -62,7 +60,7 @@ public class CertificateServiceImpl implements CertificateService {
         Certificate certificate = certificateRepository.createCertificate(certificateMapper.toEntity(certificateDTO));
         for (TagDTO tagDTO : certificateDTO.getTags()) {
             long tagId = tagService.createTag(tagDTO).getId();
-            certificateTagService.add(certificate.getId(), tagId);
+            tagService.bind(certificate.getId(), tagId);
         }
         List<TagDTO> tags = tagService.findTagByCertificateId(certificate.getId());
         Certificate created = certificateRepository.findCertificateById(certificate.getId()).get();
@@ -86,18 +84,18 @@ public class CertificateServiceImpl implements CertificateService {
     @Transactional
     public void deleteCertificate(long id) {
         certificateRepository.findCertificateById(id).orElseThrow(EntityNotFoundException::new);
-        certificateTagService.deleteByCertificateId(id);
+        tagService.unbindByCertificateId(id);
         certificateRepository.deleteCertificate(id);
     }
 
     private void updateTags(CertificateDTO certificateDTO) {
         if (certificateDTO.getTags() != null) {
-            certificateTagService.deleteByCertificateId(certificateDTO.getId());
+            tagService.unbindByCertificateId(certificateDTO.getId());
             for (TagDTO tagDTO : certificateDTO.getTags()) {
                 TagDTO tag = tagService.createTag(tagDTO);
                 if (tag != null) {
                     long tagId = tag.getId();
-                    certificateTagService.add(certificateDTO.getId(), tagId);
+                    tagService.bind(certificateDTO.getId(), tagId);
                 }
             }
         }

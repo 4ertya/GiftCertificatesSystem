@@ -3,9 +3,9 @@ create database certificates;
 create table if not exists certificates
 (
     id               serial  not null,
-    name             text    not null,
+    name             varchar(45)    not null,
     description      text,
-    price            numeric not null,
+    price            numeric(6,2) not null,
     duration         integer not null,
     create_date      timestamp with time zone default now(),
     last_update_date timestamp with time zone default now(),

@@ -6,7 +6,6 @@ import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.mapper.TagMapper;
 import com.epam.esm.model.Tag;
 import com.epam.esm.repository.TagRepository;
-import com.epam.esm.service.CertificateTagService;
 import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ public class TagServiceImpl implements TagService {
 
     private final TagRepository tagRepository;
     private final TagMapper tagMapper;
-    private final CertificateTagService certificateTagService;
 
 
     @Override
@@ -70,7 +68,22 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public void deleteTag(long id) {
         tagRepository.findTagById(id).orElseThrow(EntityNotFoundException::new);
-        certificateTagService.deleteByTagId(id);
+        tagRepository.unbindByTagId(id);
         tagRepository.deleteTag(id);
+    }
+
+    @Override
+    public void bind(long certificateId, long tagId) {
+        tagRepository.bind(certificateId, tagId);
+    }
+
+    @Override
+    public void unbindByCertificateId(long certificateId) {
+        tagRepository.unbindByCertificateId(certificateId);
+    }
+
+    @Override
+    public void unbindByTagId(long tagId) {
+        tagRepository.unbindByTagId(tagId);
     }
 }

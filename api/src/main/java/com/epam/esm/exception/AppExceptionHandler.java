@@ -1,10 +1,6 @@
-package com.epam.esm.controller;
+package com.epam.esm.exception;
 
 
-import com.epam.esm.exception.EntityAlreadyExistException;
-import com.epam.esm.exception.EntityNotFoundException;
-import com.epam.esm.exception.ExceptionResponse;
-import com.epam.esm.exception.ValidationExceptionResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
@@ -12,6 +8,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -103,6 +100,12 @@ public class AppExceptionHandler {
                 }
         );
         return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ExceptionResponse> handleMessageNotReadableException(HttpMessageNotReadableException ex) {
+
+        return ResponseEntity.badRequest().body(new ExceptionResponse("Check query syntax", "4006"));
     }
 
     @ExceptionHandler(Throwable.class)
