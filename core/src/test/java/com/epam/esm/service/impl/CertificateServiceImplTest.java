@@ -1,7 +1,7 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dto.CertificateDTO;
-import com.epam.esm.dto.DataSortType;
+import com.epam.esm.dto.DataSortOrder;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.mapper.CertificateMapper;
@@ -84,12 +84,12 @@ class CertificateServiceImplTest {
             List<CertificateDTO> certificateDTOS = Stream.of(certificateDTO).collect(Collectors.toList());
             Specification specification = new CertificatesBySpecification(new ArrayList<>());
 
-            when(specificationCreator.receiveSpecification("tag", "partOfName", "partOfdescription", DataSortType.ASC, DataSortType.ASC)).thenReturn(Optional.of(specification));
+            when(specificationCreator.receiveSpecification("tag", "partOfName", "partOfdescription", DataSortOrder.ASC, DataSortOrder.ASC)).thenReturn(Optional.of(specification));
             when(certificateRepository.findAllCertificatesBySpecification(specification)).thenReturn(certificates);
             when(tagService.findTagByCertificateId(expectedCertificateId)).thenReturn(tagDTOS);
             when(certificateMapper.toDto(certificate, tagDTOS)).thenReturn(certificateDTO);
 
-            List<CertificateDTO> actual = certificatesService.findAllCertificates("tag", "partOfName", "partOfdescription", DataSortType.ASC, DataSortType.ASC);
+            List<CertificateDTO> actual = certificatesService.findAllCertificates("tag", "partOfName", "partOfdescription", DataSortOrder.ASC, DataSortOrder.ASC);
 
             assertEquals(certificateDTOS, actual);
         }
@@ -100,10 +100,10 @@ class CertificateServiceImplTest {
 
             Specification specification = new CertificatesBySpecification(new ArrayList<>());
 
-            when(specificationCreator.receiveSpecification("tag", "partOfName", "partOfdescription", DataSortType.ASC, DataSortType.ASC)).thenReturn(Optional.of(specification));
+            when(specificationCreator.receiveSpecification("tag", "partOfName", "partOfdescription", DataSortOrder.ASC, DataSortOrder.ASC)).thenReturn(Optional.of(specification));
             when(certificateRepository.findAllCertificatesBySpecification(specification)).thenReturn(new ArrayList<>());
 
-            List<CertificateDTO> actual = certificatesService.findAllCertificates("tag", "partOfName", "partOfdescription", DataSortType.ASC, DataSortType.ASC);
+            List<CertificateDTO> actual = certificatesService.findAllCertificates("tag", "partOfName", "partOfdescription", DataSortOrder.ASC, DataSortOrder.ASC);
 
             assertNull(actual);
         }

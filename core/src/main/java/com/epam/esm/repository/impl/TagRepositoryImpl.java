@@ -3,7 +3,6 @@ package com.epam.esm.repository.impl;
 import com.epam.esm.model.Tag;
 import com.epam.esm.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -18,7 +17,7 @@ import java.util.Optional;
 
 
 @Repository
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class TagRepositoryImpl implements TagRepository {
 
     private final static String SELECT_ALL_QUERY = "SELECT * FROM tags;";
@@ -26,7 +25,7 @@ public class TagRepositoryImpl implements TagRepository {
     private final static String SELECT_BY_NAME_QUERY = "SELECT * FROM tags WHERE name=?;";
     private final static String SELECT_BY_CERTIFICATE_ID_QUERY = "SELECT * FROM tags " +
             "JOIN certificates_tags gct ON tags.id = gct.tags_id WHERE gct.gift_certificates_id=?;";
-    private final static String INSERT_QUERY = "INSERT INTO tags(name) VALUES (:name) ON CONFLICT (name) DO NOTHING;";
+    private final static String INSERT_QUERY = "INSERT INTO tags(name) VALUES (:name);";
     private final static String UPDATE_QUERY = "UPDATE tags SET name=? WHERE id=?;";
     private final static String DELETE_QUERY = "DELETE FROM tags WHERE id=?;";
 

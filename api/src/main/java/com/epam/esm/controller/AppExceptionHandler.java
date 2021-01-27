@@ -71,7 +71,7 @@ public class AppExceptionHandler {
         String message = messageSource.getMessage(e.getErrorCode(), null, webRequest.getLocale());
         ExceptionResponse exceptionResponse = new ExceptionResponse(message, e.getErrorCode());
 
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(SQLException.class)

@@ -1,6 +1,6 @@
 package com.epam.esm.dto;
 
-public enum DataSortType {
+public enum DataSortOrder {
     ASC,
     DESC
 }

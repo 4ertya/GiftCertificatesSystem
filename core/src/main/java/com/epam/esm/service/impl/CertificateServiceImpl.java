@@ -2,7 +2,7 @@ package com.epam.esm.service.impl;
 
 
 import com.epam.esm.dto.CertificateDTO;
-import com.epam.esm.dto.DataSortType;
+import com.epam.esm.dto.DataSortOrder;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.mapper.CertificateMapper;
@@ -33,8 +33,7 @@ public class CertificateServiceImpl implements CertificateService {
 
 
     @Override
-    @Transactional
-    public List<CertificateDTO> findAllCertificates(String tagName, String partName, String partDescription, DataSortType dateSort, DataSortType nameSort) {
+    public List<CertificateDTO> findAllCertificates(String tagName, String partName, String partDescription, DataSortOrder dateSort, DataSortOrder nameSort) {
         Optional<Specification> receiveSpecification = specificationCreator.receiveSpecification(tagName, partName, partDescription, dateSort, nameSort);
 
         List<Certificate> certificates = receiveSpecification.isPresent() ? certificateRepository.findAllCertificatesBySpecification(receiveSpecification.get()) : certificateRepository.findAllCertificates();
@@ -50,7 +49,6 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    @Transactional
     public CertificateDTO findCertificateById(long id) {
         Certificate certificate = certificateRepository.findCertificateById(id)
                 .orElseThrow(EntityNotFoundException::new);

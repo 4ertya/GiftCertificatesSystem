@@ -2,11 +2,12 @@ package com.epam.esm.controller;
 
 
 import com.epam.esm.dto.CertificateDTO;
-import com.epam.esm.dto.DataSortType;
+import com.epam.esm.dto.DataSortOrder;
 import com.epam.esm.service.CertificateService;
 import com.epam.esm.validator.NewEntity;
 import com.epam.esm.validator.UpdateEntity;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +28,8 @@ public class CertificateController {
             @RequestParam(required = false) String tag,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String description,
-            @RequestParam(required = false) DataSortType dateSort,
-            @RequestParam(required = false) DataSortType nameSort
+            @RequestParam(required = false) DataSortOrder dateSort,
+            @RequestParam(required = false) DataSortOrder nameSort
     ) {
         return certificateService.findAllCertificates(tag, name, description, dateSort, nameSort);
     }
@@ -38,6 +39,7 @@ public class CertificateController {
         return certificateService.findCertificateById(id);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public CertificateDTO create(@Validated(NewEntity.class) @RequestBody CertificateDTO certificateDTO) {
         return certificateService.createCertificate(certificateDTO);
@@ -49,6 +51,7 @@ public class CertificateController {
         return certificateService.updateCertificate(certificateDTO);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") long id) {
         certificateService.deleteCertificate(id);

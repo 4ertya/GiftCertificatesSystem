@@ -1,6 +1,6 @@
 package com.epam.esm.repository.specification.impl;
 
-import com.epam.esm.dto.DataSortType;
+import com.epam.esm.dto.DataSortOrder;
 import com.epam.esm.repository.specification.Specification;
 import lombok.AllArgsConstructor;
 
@@ -8,11 +8,11 @@ import lombok.AllArgsConstructor;
 public class CertificatesSortByNameSpecification implements Specification {
 
     private final String sqlRequest;
-    private final DataSortType dataSortType;
+    private final DataSortOrder dataSortOrder;
 
     @Override
     public String toSqlRequest() {
-        return sqlRequest+ "certificates.name " + dataSortType.name();
+        return sqlRequest+ "certificates.name " + dataSortOrder.name();
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.epam.esm.repository.specification;
 
-import com.epam.esm.dto.DataSortType;
+import com.epam.esm.dto.DataSortOrder;
 import com.epam.esm.repository.specification.impl.*;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ public class SpecificationCreator {
     private final static String ORDER_BY = " ORDER BY ";
     private final static String DELIMITER = ", ";
 
-    public Optional<Specification> receiveSpecification(String tagName, String partOfName, String partOfDescription, DataSortType dateSort, DataSortType nameSort) {
+    public Optional<Specification> receiveSpecification(String tagName, String partOfName, String partOfDescription, DataSortOrder dateSort, DataSortOrder nameSort) {
         List<Specification> specifications = new ArrayList<>();
         boolean isTwoSort = false;
 

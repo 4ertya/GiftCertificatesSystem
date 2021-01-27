@@ -17,6 +17,10 @@ dependencies {
     testCompile 'org.mockito:mockito-core:3.7.7'
     testCompile 'org.mockito:mockito-junit-jupiter:3.7.7'
     compile 'org.junit.platform:junit-platform-runner:1.6.3'
+
+    compile 'com.h2database:h2:1.4.200'
+
+    compile 'com.opentable.components:otj-pg-embedded:0.13.3'
 }
 
 test{

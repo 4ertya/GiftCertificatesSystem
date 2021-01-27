@@ -1,6 +1,6 @@
 package com.epam.esm.config;
 
-import com.epam.esm.dto.DataSortType;
+import com.epam.esm.dto.DataSortOrder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -48,10 +48,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(new Converter<String, DataSortType>(){
+        registry.addConverter(new Converter<String, DataSortOrder>(){
             @Override
-            public DataSortType convert(String source) {
-                return DataSortType.valueOf(source.toUpperCase());
+            public DataSortOrder convert(String source) {
+                return DataSortOrder.valueOf(source.toUpperCase());
             }
         });
     }

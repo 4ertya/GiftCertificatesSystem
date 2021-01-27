@@ -13,7 +13,7 @@
     <logger name="java.sql" level="ERROR"/>
     <logger name="jdbc.connection" level="ERROR"/>
     <logger name="jdbc.datasource" level="ERROR"/>
-    <root level="INFO">
+    <root level="WARN">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

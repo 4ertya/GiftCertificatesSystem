@@ -1,12 +1,14 @@
 package com.epam.esm.config;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -14,7 +16,8 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
-public class DBConfig {
+@ComponentScan("com.epam.esm")
+public class EmbeddedTestConfig {
 
     @Bean
     public TransactionManager transactionManager() {
@@ -25,8 +28,13 @@ public class DBConfig {
 
     @Bean
     public DataSource dataSource() {
-        HikariConfig config = new HikariConfig("/db.properties");
-        return new HikariDataSource(config);
+        EmbeddedDatabase database = new EmbeddedDatabaseBuilder()
+                .setType(EmbeddedDatabaseType.H2)
+                .setScriptEncoding("UTF-8")
+                .addScript("create_db.sql")
+                .addScript("insert.sql")
+                .build();
+        return database;
     }
 
     @Bean
