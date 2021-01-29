@@ -2,12 +2,23 @@ plugins {
     id 'java'
 }
 
-version 'unspecified'
+
+group 'com.epam.esm'
+version '1.0'
+
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    testCompile 'org.mockito:mockito-core:3.7.7'
+    testCompile 'org.mockito:mockito-junit-jupiter:3.7.7'
+    
+}
+
+test{
+    useJUnitPlatform()
+
 }
